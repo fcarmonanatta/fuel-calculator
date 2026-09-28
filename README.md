@@ -8,6 +8,14 @@ Herramienta web (un solo archivo, `index.html`) para decidir cargas de combustib
 
 No necesita servidor ni build: abrir `index.html` en el navegador o publicarlo tal cual (AI Studio, GitHub Pages, etc.).
 
+## Aeropuertos
+
+Cada tramo tiene un buscador: se escribe el código OACI, el IATA, la ciudad o el nombre (con o sin tildes) y aparecen las opciones; se elige con el dedo, con Enter o con Tab. Si se escribe un IATA (por ejemplo `EZE`) y se sale del campo, se convierte solo a OACI (`SAEZ`). Un código que no está en la base se acepta igual, con un aviso.
+
+La base viene embebida en `index.html`: funciona sin internet y sin clave de API. Son ~9.300 aeropuertos de [OurAirports](https://ourairports.com/data/) (dominio público): todos los grandes y medianos del mundo más los chicos de Sudamérica con código OACI. A igual coincidencia se priorizan los más grandes y los de Sudamérica.
+
+Para actualizarla: `python3 tools/build_airports.py` (descarga el CSV y reescribe el bloque `airports-data`).
+
 ## Identidad visual
 
 Basada en el Brandbook de Flyzar:

@@ -8,8 +8,9 @@ const html = readFileSync(new URL('../index.html', import.meta.url), 'utf8');
 const src = /<script id="calc">([\s\S]*?)<\/script>/.exec(html)[1];
 const ctx = {};
 vm.createContext(ctx);
-vm.runInContext(src + ';Object.assign(globalThis,{parseN,toUSG,calcWaiver,calcTankering,csvCell});', ctx);
-const { parseN, toUSG, calcWaiver, calcTankering, csvCell } = ctx;
+vm.runInContext(src + ';Object.assign(globalThis,{parseN,toUSG,calcWaiver,calcTankering,csvCell,searchAirports});', ctx);
+const { parseN, toUSG, calcWaiver, calcTankering, csvCell, searchAirports } = ctx;
+const AIRPORTS = JSON.parse(/<script type="application\/json" id="airports-data">([\s\S]*?)<\/script>/.exec(html)[1]);
 const close = (a, b, eps = 1e-6) => assert.ok(Math.abs(a - b) < eps, `${a} ≈ ${b}`);
 
 test('parseN acepta formatos con coma y punto', () => {
@@ -106,4 +107,26 @@ test('waiver aprovechando el extra: el galón extra cuesta p − pNext', () => {
   assert.equal(calcWaiver({ ...base, nextPrice: 7 }).be, 0);
   // sin nextPrice se comporta como antes
   close(calcWaiver({ fee: 300, min: 200, price: 6, nextPrice: 0 }).be, 150);
+});
+
+test('base de aeropuertos embebida', () => {
+  assert.ok(AIRPORTS.length > 5000);
+  const saez = AIRPORTS.find(a => a[0] === 'SAEZ');
+  assert.equal(saez[1], 'EZE');
+  assert.ok(AIRPORTS.find(a => a[0] === 'SADF'), 'incluye aeropuertos chicos/medianos de Sudamérica');
+});
+
+test('searchAirports: por OACI, IATA, ciudad y sin tildes', () => {
+  const top = (q) => searchAirports(AIRPORTS, q)[0]?.[0];
+  assert.equal(top('SCEL'), 'SCEL');
+  assert.equal(top('saez'), 'SAEZ');
+  assert.equal(top('EZE'), 'SAEZ');
+  assert.equal(top('aeroparque'), 'SABE');
+  assert.equal(top('sao paulo'), 'SBGR');
+  assert.equal(top('São Paulo'), 'SBGR');
+  assert.ok(searchAirports(AIRPORTS, 'SA').length === 8);
+  assert.equal(searchAirports(AIRPORTS, '   ').length, 0);
+  assert.equal(top('santiago'), 'SCEL');
+  assert.equal(top('san fernando'), 'SADF');
+  assert.equal(top('miami'), 'KMIA');
 });
