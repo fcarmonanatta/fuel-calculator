@@ -1,0 +1,971 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#0f172a" />
+  <title>Flyzar Fuel Calculator</title>
+  <style>
+    :root {
+      --bg: #f8fafc;
+      --card-bg: #ffffff;
+      --border: #e2e8f0;
+      --border-strong: #cbd5e1;
+      --text: #0f172a;
+      --text-muted: #475569;
+      --text-faint: #94a3b8;
+      --primary: #d97706;
+      --primary-soft: #fffbeb;
+      --emerald: #059669;
+      --emerald-dark: #047857;
+      --rose: #e11d48;
+      --blue: #2563eb;
+      --yellow-bg: #fefce8; --yellow-bd: #fde047; --yellow-tx: #713f12;
+      --red-bg: #fff1f2;    --red-bd: #fecdd3;    --red-tx: #881337;
+      --green-bg: #ecfdf5;  --green-bd: #a7f3d0;  --green-tx: #064e3b;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { -webkit-text-size-adjust: 100%; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background-color: var(--bg); color: var(--text);
+      padding: max(14px, env(safe-area-inset-top)) max(14px, env(safe-area-inset-right)) max(24px, env(safe-area-inset-bottom)) max(14px, env(safe-area-inset-left));
+      min-height: 100vh; display: flex; justify-content: center;
+    }
+    button, input, select { font: inherit; color: inherit; }
+    button { cursor: pointer; }
+    :focus-visible { outline: 3px solid #fbbf24; outline-offset: 2px; }
+    .container { max-width: 440px; width: 100%; display: flex; flex-direction: column; gap: 14px; }
+    header { display: flex; align-items: center; justify-content: space-between; padding: 4px 0; }
+    h1 { font-size: 1.25rem; font-weight: 800; letter-spacing: -0.01em; }
+    .subtitle { font-size: 0.75rem; color: var(--text-muted); font-weight: 500; }
+    .view { display: none; flex-direction: column; gap: 14px; }
+    .view.active { display: flex; }
+    .card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 18px; padding: 16px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+    .muted { color: var(--text-muted); }
+    .small { font-size: 0.75rem; }
+    .mono { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-variant-numeric: tabular-nums; }
+    .num { font-variant-numeric: tabular-nums; }
+
+    .menu-btn { width: 100%; padding: 16px; border-radius: 16px; border: 1px solid var(--border); background: #fff; text-align: left; display: flex; align-items: center; justify-content: space-between; gap: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.04); }
+    .menu-btn:hover { border-color: var(--primary); background: var(--primary-soft); }
+    .menu-btn strong { font-size: 1rem; display: block; margin-bottom: 3px; }
+    .menu-btn span.desc { font-size: 0.78rem; color: var(--text-muted); }
+    .menu-btn .arrow { font-size: 1.3rem; color: var(--text-faint); }
+
+    .nav-bar { display: flex; align-items: center; justify-content: space-between; }
+    .back-btn { background: #f1f5f9; border: 1px solid var(--border-strong); border-radius: 10px; padding: 8px 12px; font-size: 0.8rem; font-weight: 700; }
+    .nav-title { font-size: 0.8rem; font-weight: 700; }
+
+    .section-title { font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); margin-bottom: 12px; }
+    .input-item { margin-bottom: 14px; }
+    .input-item:last-child { margin-bottom: 0; }
+    .input-header { display: flex; justify-content: space-between; gap: 8px; font-size: 0.8rem; font-weight: 700; margin-bottom: 6px; color: #1e293b; }
+    .input-header .hint { font-weight: 600; color: var(--text-muted); text-align: right; }
+    .input-row { display: flex; gap: 6px; }
+    .input-row input { flex: 1; min-width: 0; }
+    input[type=text], select {
+      width: 100%; height: 48px; border-radius: 12px; border: 1px solid var(--border-strong); background: var(--bg);
+      font-size: 1.25rem; font-weight: 700; text-align: center; outline: none;
+    }
+    input[type=text]::placeholder { color: var(--border-strong); font-weight: 400; }
+    input[type=text]:focus, select:focus { border-color: var(--primary); background: #fff; }
+    input.invalid { border-color: var(--rose); background: var(--red-bg); }
+    select { width: 72px; flex: none; background: #fff; font-size: 0.8rem; font-weight: 800; }
+    input.icao { width: 84px; height: 34px; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.04em; }
+    input.small-in { height: 38px; font-size: 0.95rem; }
+    .field-help { font-size: 0.7rem; color: var(--text-muted); margin-top: 4px; }
+    .field-warn { font-size: 0.72rem; color: var(--rose); font-weight: 700; margin-top: 4px; }
+
+    .hero-value { font-size: 2.8rem; font-weight: 800; font-variant-numeric: tabular-nums; line-height: 1.05; margin: 4px 0 6px; text-align: center; }
+    .hero-unit { font-size: 1.2rem; font-weight: 700; color: var(--primary); }
+    .hero-sub { font-size: 0.95rem; font-weight: 600; color: var(--text-muted); text-align: center; font-variant-numeric: tabular-nums; margin-bottom: 14px; }
+
+    /* Escala de decisión (proporcional real) */
+    .scale-box { border-top: 1px solid #f1f5f9; padding-top: 14px; }
+    .scale-bar { position: relative; height: 44px; border-radius: 12px; background: var(--border); overflow: hidden; display: flex; border: 2px solid var(--border-strong); }
+    .seg { height: 100%; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 0.66rem; text-transform: uppercase; white-space: nowrap; overflow: hidden; padding: 0 4px; transition: width 0.15s; }
+    .seg-yellow { background: #facc15; color: #451a03; }
+    .seg-red { background: var(--rose); color: #fff; }
+    .seg-green { background: #10b981; color: #fff; }
+    .scale-marker { position: absolute; top: -2px; bottom: -2px; width: 4px; background: #0f172a; border: 1px solid #fff; transform: translateX(-50%); transition: left 0.15s; display: none; }
+    .scale-ticks { position: relative; height: 18px; font-size: 0.66rem; font-weight: 800; color: var(--text-muted); margin-top: 4px; }
+    .scale-ticks span { position: absolute; transform: translateX(-50%); white-space: nowrap; transition: left 0.15s; }
+    .zones { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-top: 10px; text-align: center; }
+    .zone { padding: 8px 5px; border-radius: 10px; border: 1px solid; font-size: 0.68rem; font-weight: 900; display: flex; flex-direction: column; gap: 4px; }
+    .zone .range { font-size: 0.66rem; font-weight: 700; padding-top: 4px; border-top: 1px solid rgba(0,0,0,0.06); }
+    .zone.yellow { background: var(--yellow-bg); border-color: var(--yellow-bd); color: var(--yellow-tx); }
+    .zone.red { background: var(--red-bg); border-color: var(--red-bd); color: var(--red-tx); }
+    .zone.green { background: var(--green-bg); border-color: var(--green-bd); color: var(--green-tx); }
+    .zone.current { outline: 3px solid #0f172a; outline-offset: 1px; }
+
+    .verdict { border-radius: 14px; padding: 14px; border: 2px solid; }
+    .verdict.yellow { background: var(--yellow-bg); border-color: #eab308; color: var(--yellow-tx); }
+    .verdict.red { background: var(--red-bg); border-color: var(--rose); color: var(--red-tx); }
+    .verdict.green { background: var(--green-bg); border-color: var(--emerald); color: var(--green-tx); }
+    .verdict.neutral { background: #f1f5f9; border-color: var(--border-strong); color: var(--text-muted); }
+    .verdict-title { font-weight: 900; font-size: 0.95rem; margin-bottom: 6px; }
+    .verdict-body { font-size: 0.8rem; line-height: 1.45; }
+    .cmp { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 0.78rem; background: rgba(255,255,255,0.7); border-radius: 8px; overflow: hidden; }
+    .cmp td { padding: 6px 8px; border-top: 1px solid rgba(0,0,0,0.06); }
+    .cmp td:last-child { text-align: right; font-weight: 800; font-variant-numeric: tabular-nums; }
+    .cmp tr.best td { background: rgba(16,185,129,0.15); }
+
+    .rule-card { padding: 12px 14px; border-radius: 12px; margin-bottom: 10px; font-size: 0.8rem; line-height: 1.45; }
+    .rule-card:last-child { margin-bottom: 0; }
+    .rule-yellow { background: var(--yellow-bg); border-left: 4px solid #eab308; color: var(--yellow-tx); }
+    .rule-red { background: var(--red-bg); border-left: 4px solid var(--rose); color: var(--red-tx); }
+    .rule-green { background: var(--green-bg); border-left: 4px solid var(--emerald); color: var(--green-tx); }
+    .rule-title { font-weight: 800; font-size: 0.82rem; margin-bottom: 3px; }
+
+    .leg-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; gap: 8px; }
+    .leg-head .section-title { margin-bottom: 0; }
+    .leg-head .right { display: flex; gap: 6px; align-items: center; }
+    .icon-btn { background: #fee2e2; border: none; border-radius: 8px; color: #b91c1c; font-weight: 800; width: 34px; height: 34px; }
+    .dashed-btn { width: 100%; height: 44px; border-radius: 12px; border: 2px dashed var(--border-strong); background: #fff; font-weight: 700; font-size: 0.82rem; }
+    .toggle-card { background: #fff; border: 1px solid var(--border); border-radius: 14px; padding: 12px 14px; }
+    .toggle-card label.row { display: flex; justify-content: space-between; align-items: center; gap: 10px; cursor: pointer; }
+    .toggle-card input[type=checkbox] { width: 20px; height: 20px; accent-color: var(--emerald); flex: none; }
+
+    .alert { border-radius: 14px; padding: 12px 14px; border: 2px solid; font-size: 0.78rem; line-height: 1.4; }
+    .alert strong.t { display: block; font-size: 0.85rem; font-weight: 900; margin-bottom: 4px; }
+    .alert.loss { background: var(--red-bg); border-color: #f43f5e; color: var(--red-tx); }
+    .alert.warn { background: var(--yellow-bg); border-color: #eab308; color: var(--yellow-tx); }
+
+    .step-box { background: #f8fafc; border: 1px solid var(--border); border-radius: 12px; padding: 12px; margin-bottom: 10px; font-size: 0.78rem; color: #334155; }
+    .step-box.pos { background: var(--green-bg); border-color: var(--green-bd); color: var(--green-tx); }
+    .step-box.neg { background: var(--red-bg); border-color: var(--red-bd); color: var(--red-tx); }
+    .step-title { font-weight: 800; margin-bottom: 6px; font-size: 0.82rem; }
+    .kv { display: flex; justify-content: space-between; gap: 8px; margin-bottom: 3px; }
+    .kv.total { padding-top: 5px; margin-top: 4px; border-top: 1px dashed var(--border-strong); font-weight: 800; }
+    .note { font-size: 0.73rem; color: #64748b; background: #f8fafc; padding: 8px 10px; border-radius: 10px; border: 1px solid var(--border); line-height: 1.4; }
+
+    .btn-row { display: flex; gap: 8px; }
+    .btn { flex: 1; height: 44px; border-radius: 12px; border: none; color: #fff; font-weight: 800; font-size: 0.82rem; display: flex; align-items: center; justify-content: center; gap: 6px; }
+    .btn:disabled { opacity: 0.45; cursor: not-allowed; }
+    .btn.green { background: var(--emerald); }
+    .btn.blue { background: var(--blue); }
+    .btn.ghost { background: #f1f5f9; color: var(--text); border: 1px solid var(--border-strong); }
+    .btn.soft-blue { background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe; }
+
+    .save-form { display: none; margin-top: 12px; padding-top: 12px; border-top: 1px dashed var(--border-strong); }
+    .save-form.open { display: block; }
+    .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    .grid2 label, .lbl { font-size: 0.7rem; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 4px; }
+
+    .kpis { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; padding: 12px 8px; text-align: center; }
+    .kpi-l { font-size: 0.65rem; font-weight: 700; color: #64748b; text-transform: uppercase; }
+    .kpi-v { font-size: 0.95rem; font-weight: 900; }
+    .log-item { background: #fff; border: 1px solid var(--border); border-radius: 14px; padding: 12px; display: flex; flex-direction: column; gap: 6px; font-size: 0.78rem; }
+    .log-top { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #f1f5f9; padding-bottom: 6px; gap: 8px; }
+    .reg { background: #dbeafe; color: #1e40af; font-weight: 900; font-size: 0.75rem; padding: 2px 6px; border-radius: 6px; }
+    .del-btn { background: none; border: none; color: var(--text-faint); font-weight: 800; font-size: 0.9rem; padding: 4px 6px; }
+    .del-btn:hover { color: var(--rose); }
+    .empty { background: #fff; border: 2px dashed var(--border-strong); border-radius: 14px; padding: 24px; text-align: center; color: var(--text-faint); font-size: 0.8rem; font-weight: 700; }
+
+    .toast { position: fixed; left: 50%; bottom: max(20px, env(safe-area-inset-bottom)); transform: translateX(-50%) translateY(20px); background: #0f172a; color: #fff; padding: 10px 16px; border-radius: 12px; font-size: 0.82rem; font-weight: 700; opacity: 0; pointer-events: none; transition: all 0.2s; z-index: 100; max-width: calc(100% - 32px); text-align: center; }
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+    .print-only { display: none; }
+    @media print {
+      body { background: #fff; padding: 0; }
+      .no-print, .nav-bar, .btn-row, .dashed-btn, .icon-btn, .save-form, .toast { display: none !important; }
+      .print-only { display: block; }
+      .card, .step-box, .alert { box-shadow: none; break-inside: avoid; }
+      .container { max-width: 100%; }
+      * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div>
+        <h1>FLYZAR FUEL CALCULATOR</h1>
+        <div class="subtitle">Herramienta de Combustible</div>
+      </div>
+    </header>
+
+    <!-- ============ MENÚ ============ -->
+    <div id="view-menu" class="view">
+      <button class="menu-btn" data-go="waiver">
+        <div><strong>Punto de equilibrio para waivear</strong><span class="desc">¿Pago el handling fee o cargo el mínimo?</span></div>
+        <span class="arrow" aria-hidden="true">→</span>
+      </button>
+      <button class="menu-btn" data-go="tankering">
+        <div><strong>Calculadora de ahorro tankereando</strong><span class="desc">Cuánto te ahorrás llevando combustible barato</span></div>
+        <span class="arrow" aria-hidden="true">→</span>
+      </button>
+      <button class="menu-btn" data-go="bitacora">
+        <div><strong>Registro de ahorro</strong><span class="desc">Bitácora de vuelos tankereados y total ahorrado</span></div>
+        <span class="arrow" aria-hidden="true" style="color: var(--blue);">→</span>
+      </button>
+
+      <section class="card">
+        <div class="section-title">Ajustes</div>
+        <div class="input-item">
+          <div class="input-header"><label for="density">Densidad del combustible</label><span class="hint">lb / USG</span></div>
+          <input type="text" inputmode="decimal" id="density" placeholder="6.7" />
+          <div class="field-help">Jet A-1 ≈ 6.7 lb/USG (varía con la temperatura: 6.5–6.9). Se usa en todas las conversiones LBS ↔ USG.</div>
+        </div>
+      </section>
+    </div>
+
+    <!-- ============ PUNTO DE EQUILIBRIO / WAIVER ============ -->
+    <div id="view-waiver" class="view">
+      <div class="nav-bar">
+        <button class="back-btn" data-go="menu">← Volver al Menú</button>
+        <span class="nav-title">Punto de Equilibrio</span>
+      </div>
+
+      <section class="card">
+        <div class="section-title">1. Datos del FBO</div>
+        <div class="input-item">
+          <div class="input-header"><label for="fee">Handling Fee (USD)</label><span class="hint num" id="fee-disp"></span></div>
+          <input type="text" inputmode="decimal" id="fee" placeholder="0" />
+        </div>
+        <div class="input-item">
+          <div class="input-header"><label for="waiver">Mínimo para waivear (USG)</label><span class="hint num" id="waiver-disp"></span></div>
+          <input type="text" inputmode="decimal" id="waiver" placeholder="0" />
+        </div>
+        <div class="input-item">
+          <div class="input-header"><label for="price">Fuel Price (USD/USG)</label><span class="hint num" id="price-disp"></span></div>
+          <input type="text" inputmode="decimal" id="price" placeholder="0.00" />
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="section-title" style="text-align:center; color:#b45309;">2. Punto de equilibrio</div>
+        <div class="hero-value"><span id="be-val">—</span> <span class="hero-unit">USG</span></div>
+        <div class="hero-sub" id="be-sub">Completá los datos del FBO</div>
+        <div class="scale-box">
+          <div class="scale-bar" aria-hidden="true">
+            <div id="seg-yellow" class="seg seg-yellow" style="width:33.3%">Carga lo justo</div>
+            <div id="seg-red" class="seg seg-red" style="width:33.3%">No cargues</div>
+            <div id="seg-green" class="seg seg-green" style="width:33.4%">Carga tranquilo</div>
+            <div id="scale-marker" class="scale-marker" title="Lo que necesitás"></div>
+          </div>
+          <div class="scale-ticks" aria-hidden="true">
+            <span id="tick-be" style="left:33.3%">—</span>
+            <span id="tick-min" style="left:66.6%">—</span>
+          </div>
+          <div class="zones">
+            <div class="zone yellow" id="zone-yellow">🟡 CARGA LO JUSTO<div class="range">Hasta <span id="z-be">—</span> USG</div></div>
+            <div class="zone red" id="zone-red">🔴 NO CARGUES<div class="range"><span id="z-mid1">—</span> a <span id="z-mid2">—</span> USG</div></div>
+            <div class="zone green" id="zone-green">🟢 CARGA TRANQUILO<div class="range">Desde <span id="z-min">—</span> USG</div></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="section-title">3. ¿Cuánto necesitás cargar?</div>
+        <div class="input-item">
+          <div class="input-header"><label for="w-need">Combustible que necesitás</label><span class="hint num" id="w-need-disp"></span></div>
+          <div class="input-row">
+            <input type="text" inputmode="decimal" id="w-need" placeholder="0" />
+            <select id="w-need-u" aria-label="Unidad"><option value="USG">USG</option><option value="LBS">LBS</option><option value="LTS">LTS</option></select>
+          </div>
+        </div>
+        <div id="w-verdict" class="verdict neutral" aria-live="polite">
+          <div class="verdict-title">Ingresá cuánto necesitás</div>
+          <div class="verdict-body">Te decimos qué te conviene y cuánto te sale cada opción.</div>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="section-title">Reglas de decisión</div>
+        <div class="rule-card rule-yellow">
+          <div class="rule-title">🟡 Menos de <span class="r-be">—</span> USG — CARGA LO JUSTO</div>
+          <div><strong>Pagá el handling fee y cargá lo justo.</strong> Llegar al mínimo te sale más caro que el fee.</div>
+        </div>
+        <div class="rule-card rule-red">
+          <div class="rule-title">🔴 Entre <span class="r-be">—</span> y <span class="r-min">—</span> USG — NO CARGUES JUSTO</div>
+          <div><strong>¡No pagues el fee en este rango!</strong> Estirate y cargá los <span class="r-min">—</span> USG del mínimo: te sale más barato que el fee + tu combustible. ¡Te llevás combustible gratis!</div>
+        </div>
+        <div class="rule-card rule-green">
+          <div class="rule-title">🟢 <span class="r-min">—</span> USG o más — CARGA TRANQUILO</div>
+          <div><strong>Cargá de una.</strong> Alcanzás el mínimo y el handling fee queda 100% bonificado.</div>
+        </div>
+      </section>
+    </div>
+
+    <!-- ============ TANKERING ============ -->
+    <div id="view-tankering" class="view">
+      <div class="nav-bar">
+        <button class="back-btn" data-go="menu">← Volver al Menú</button>
+        <span class="nav-title">Ahorro Tankereando</span>
+      </div>
+
+      <div class="print-only card">
+        <strong>Flyzar — Análisis de tankering</strong><br />
+        <span class="small muted" id="print-date"></span>
+      </div>
+
+      <div id="legs"></div>
+      <button id="btn-add-leg" class="dashed-btn" type="button">+ Agregar tramo</button>
+
+      <div class="toggle-card">
+        <label class="row" for="t-carry-check">
+          <div style="display:flex; align-items:center; gap:8px;">
+            <span style="font-size:1.1rem;" aria-hidden="true">⚖️</span>
+            <div>
+              <div style="font-size:0.8rem; font-weight:800;">Descontar costo de acarreo de peso</div>
+              <div style="font-size:0.7rem; color:#64748b;">Parte del combustible extra se quema por llevar más peso</div>
+            </div>
+          </div>
+          <input type="checkbox" id="t-carry-check" />
+        </label>
+        <div id="t-carry-fields" style="display:none; margin-top:10px; padding-top:10px; border-top:1px dashed var(--border);">
+          <label class="lbl" for="t-carry-rate">Tasa de quemado del extra (% por hora de vuelo)</label>
+          <input type="text" inputmode="decimal" id="t-carry-rate" class="small-in" placeholder="3.0" />
+          <div class="field-help">Las horas de vuelo se cargan en cada tramo. Regla típica: 3–4 %/hr para jets.</div>
+        </div>
+      </div>
+
+      <div id="t-alerts" style="display:flex; flex-direction:column; gap:10px;" aria-live="polite"></div>
+
+      <section class="card">
+        <div class="section-title" style="text-align:center; color:var(--emerald);">Ahorro estimado tankereando</div>
+        <div class="hero-value" id="t-sav-val">USD 0</div>
+        <div class="hero-sub" id="t-sav-sub">Completá los tramos arriba para ver el ahorro</div>
+        <div id="t-steps"></div>
+
+        <div class="note">⚠️ <strong>Ojo con los pesos:</strong> chequeá no pasarte de MTOW al despegar ni de MLW al tocar.</div>
+
+        <div class="btn-row" style="margin-top:10px;">
+          <button class="btn green" type="button" id="btn-print">📄 Imprimir / PDF</button>
+          <button class="btn blue" type="button" id="btn-open-save">💾 Guardar vuelo</button>
+        </div>
+
+        <form id="save-form" class="save-form" autocomplete="off">
+          <div class="grid2">
+            <div>
+              <label for="s-reg">Matrícula</label>
+              <input type="text" id="s-reg" class="small-in" list="reg-list" placeholder="LV-KLH" style="text-transform:uppercase;" required />
+              <datalist id="reg-list"></datalist>
+            </div>
+            <div>
+              <label for="s-flt">N° de vuelo (opcional)</label>
+              <input type="text" id="s-flt" class="small-in" placeholder="—" style="text-transform:uppercase;" />
+            </div>
+          </div>
+          <div style="margin-top:8px;">
+            <label class="lbl" for="s-date">Fecha</label>
+            <input type="date" id="s-date" class="small-in" style="width:100%; height:38px; border-radius:12px; border:1px solid var(--border-strong); background:var(--bg); text-align:center; font-weight:700;" />
+          </div>
+          <div class="btn-row" style="margin-top:10px;">
+            <button type="button" class="btn ghost" id="btn-cancel-save">Cancelar</button>
+            <button type="submit" class="btn blue">Guardar en bitácora</button>
+          </div>
+        </form>
+      </section>
+
+      <button type="button" class="dashed-btn no-print" id="btn-reset-tank" style="color:var(--text-muted);">↺ Limpiar todo</button>
+    </div>
+
+    <!-- ============ BITÁCORA ============ -->
+    <div id="view-bitacora" class="view">
+      <div class="nav-bar">
+        <button class="back-btn" data-go="menu">← Volver al Menú</button>
+        <span class="nav-title">Registro de ahorro</span>
+      </div>
+
+      <section class="card kpis">
+        <div><div class="kpi-l">Ahorro total</div><div id="b-kpi-sav" class="kpi-v mono" style="color:var(--emerald-dark);">USD 0</div></div>
+        <div><div class="kpi-l">Tankereado</div><div id="b-kpi-usg" class="kpi-v mono" style="color:#1d4ed8;">0 USG</div></div>
+        <div><div class="kpi-l">Vuelos</div><div id="b-kpi-cnt" class="kpi-v mono">0</div></div>
+      </section>
+
+      <div class="grid2">
+        <div>
+          <label for="b-filter-reg">Matrícula</label>
+          <select id="b-filter-reg" style="width:100%; height:40px;"><option value="">Todas</option></select>
+        </div>
+        <div>
+          <label for="b-filter-month">Mes</label>
+          <select id="b-filter-month" style="width:100%; height:40px;"><option value="">Todos</option></select>
+        </div>
+      </div>
+
+      <button type="button" class="btn soft-blue" id="btn-export" style="flex:none;">📊 Exportar a Excel (CSV)</button>
+
+      <div id="b-list" style="display:flex; flex-direction:column; gap:10px;"></div>
+    </div>
+  </div>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <!-- ================= LÓGICA DE CÁLCULO (pura, testeable) ================= -->
+  <script id="calc">
+    const LTS_PER_USG = 3.785411784;
+    const DEFAULT_DENSITY = 6.7; // lb / USG (Jet A-1)
+
+    /** Acepta "1500", "1500.5", "1500,5", "1.500,5", "1,500.5". Devuelve NaN si no es número. */
+    function parseN(val) {
+      if (val === null || val === undefined) return NaN;
+      let s = String(val).trim().replace(/\s|\$|usd/gi, '');
+      if (s === '') return NaN;
+      const hasDot = s.includes('.'), hasComma = s.includes(',');
+      if (hasDot && hasComma) {
+        // El último separador es el decimal
+        if (s.lastIndexOf(',') > s.lastIndexOf('.')) s = s.replace(/\./g, '').replace(',', '.');
+        else s = s.replace(/,/g, '');
+      } else if (hasComma) {
+        s = s.replace(',', '.');
+      }
+      return /^-?\d*\.?\d+$/.test(s) ? parseFloat(s) : NaN;
+    }
+
+    function toUSG(val, unit, density) {
+      const d = density > 0 ? density : DEFAULT_DENSITY;
+      if (!(val > 0)) return 0;
+      if (unit === 'LBS') return val / d;
+      if (unit === 'LTS') return val / LTS_PER_USG;
+      return val;
+    }
+
+    /**
+     * Punto de equilibrio del waiver.
+     * Cargar x < mínimo cuesta fee + x·p. Cargar el mínimo cuesta mín·p.
+     * Conviene estirarse al mínimo cuando x ≥ mín − fee/p  (= punto de equilibrio).
+     */
+    function calcWaiver({ fee, min, price, need }) {
+      if (!(price > 0) || !(min > 0) || !(fee >= 0)) return { valid: false };
+      const feeInGal = fee / price;
+      const be = Math.max(0, min - feeInGal);
+      const res = { valid: true, feeInGal, be, min, price, fee };
+      if (need > 0) {
+        const costJusto = (need >= min ? 0 : fee) + need * price;
+        const costMin = Math.max(need, min) * price;
+        let zone, action;
+        if (need >= min) { zone = 'green'; action = 'load-need'; }
+        else if (need < be) { zone = 'yellow'; action = 'pay-fee'; }
+        else { zone = 'red'; action = 'load-min'; }
+        res.need = need;
+        res.zone = zone;
+        res.action = action;
+        res.costJusto = costJusto;
+        res.costMin = costMin;
+        res.extraGal = Math.max(0, min - need);
+        // Cuánto te ahorrás eligiendo la mejor opción vs. la otra
+        res.saving = Math.abs(costJusto - costMin);
+      }
+      return res;
+    }
+
+    /**
+     * Tankering en cadena. legs[i] = { icao, needUSG, loadUSG, price, hours }.
+     * El extra cargado en la estación i (carga − necesidad) llega a la estación i+1
+     * y reemplaza combustible que ahí habría que comprar a price[i+1].
+     * Con acarreo, se quema extra · tasa · horas en el camino, así que llega menos.
+     *   ahorro_i = extraLlega · p[i+1] − extra · p[i]
+     *   precio máx. en origen para que convenga = p[i+1] · (1 − tasa·horas)
+     */
+    function calcTankering({ legs, carry, ratePct }) {
+      const rate = carry ? Math.max(0, ratePct || 0) / 100 : 0;
+      const steps = [];
+      let total = 0, extraTotal = 0, carryTotal = 0;
+      for (let i = 0; i < legs.length - 1; i++) {
+        const a = legs[i], b = legs[i + 1];
+        const extra = Math.max(0, (a.loadUSG || 0) - (a.needUSG || 0));
+        const burnFrac = Math.min(1, rate * Math.max(0, a.hours || 0));
+        const burnUSG = extra * burnFrac;
+        const arrive = extra - burnUSG;
+        const priced = a.price > 0 && b.price > 0;
+        const saving = priced ? arrive * b.price - extra * a.price : 0;
+        const carryCost = priced ? burnUSG * b.price : 0;
+        const beOriginPrice = priced ? b.price * (1 - burnFrac) : 0;
+        steps.push({
+          from: a.icao, to: b.icao, extra, burnUSG, arrive, priced,
+          pFrom: a.price, pTo: b.price, diff: priced ? b.price - a.price : 0,
+          gross: priced ? extra * (b.price - a.price) : 0,
+          carryCost, saving, beOriginPrice,
+          short: (a.loadUSG > 0 && a.needUSG > 0 && a.loadUSG < a.needUSG),
+        });
+        if (priced) { total += saving; carryTotal += carryCost; }
+        extraTotal += extra;
+      }
+      const last = legs[legs.length - 1];
+      const lastExtra = Math.max(0, (last.loadUSG || 0) - (last.needUSG || 0));
+      return {
+        steps, total, extraTotal, carryTotal, lastExtra,
+        lastShort: last.loadUSG > 0 && last.needUSG > 0 && last.loadUSG < last.needUSG,
+        ready: steps.some(s => s.priced && s.extra > 0),
+      };
+    }
+
+    function csvCell(v) {
+      const s = v === null || v === undefined ? '' : String(v);
+      return /[";\n\r]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s;
+    }
+  </script>
+
+  <!-- ================= UI ================= -->
+  <script>
+    const LS_BITACORA = 'flyzar_fuel_bitacora';   // misma clave que la versión original: no se pierden registros
+    const LS_STATE = 'flyzar_fuel_state_v2';
+    const MAX_LEGS = 5;
+    const KNOWN_REGS = ['LV-KLH', 'LV-VEG', 'LV-SYG'];
+    const $ = (id) => document.getElementById(id);
+
+    const nf = (dec) => new Intl.NumberFormat('es-AR', { minimumFractionDigits: dec, maximumFractionDigits: dec });
+    const fmt = (n, dec = 0) => nf(dec).format(Number.isFinite(n) ? n : 0);
+    const usd = (n, dec = 0) => (n < 0 ? '−USD ' : 'USD ') + fmt(Math.abs(n), dec);
+    const esc = (s) => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+
+    function num(id) { const v = parseN($(id).value); return Number.isFinite(v) ? Math.max(0, v) : 0; }
+    function markInvalid(el) {
+      const v = el.value.trim();
+      el.classList.toggle('invalid', v !== '' && !Number.isFinite(parseN(v)));
+    }
+
+    function storageGet(key, fallback) {
+      try { const raw = localStorage.getItem(key); return raw ? JSON.parse(raw) : fallback; } catch (e) { return fallback; }
+    }
+    function storageSet(key, val) {
+      try { localStorage.setItem(key, JSON.stringify(val)); return true; } catch (e) { return false; }
+    }
+
+    let toastTimer;
+    function toast(msg) {
+      const t = $('toast');
+      t.textContent = msg;
+      t.classList.add('show');
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => t.classList.remove('show'), 2400);
+    }
+
+    function density() { const d = parseN($('density').value); return d > 0 ? d : DEFAULT_DENSITY; }
+
+    /* ---------- Navegación (con hash: el botón "atrás" del celu funciona) ---------- */
+    const VIEWS = ['menu', 'waiver', 'tankering', 'bitacora'];
+    function showView(view) {
+      if (!VIEWS.includes(view)) view = 'menu';
+      VIEWS.forEach(v => $('view-' + v).classList.toggle('active', v === view));
+      if (view === 'bitacora') renderBitacora();
+      window.scrollTo(0, 0);
+    }
+    document.addEventListener('click', (e) => {
+      const go = e.target.closest('[data-go]');
+      if (!go) return;
+      const v = go.getAttribute('data-go');
+      if (v === 'menu') { if (location.hash) history.back(); else showView('menu'); }
+      else location.hash = v;
+    });
+    window.addEventListener('hashchange', () => showView(location.hash.slice(1)));
+
+    /* ---------- Estado persistido (los datos no se pierden al cerrar la app) ---------- */
+    let state = storageGet(LS_STATE, null) || {};
+    state.legs = Array.isArray(state.legs) && state.legs.length >= 2 ? state.legs.slice(0, MAX_LEGS) : [newLeg(), newLeg()];
+    function newLeg() { return { icao: '', need: '', needU: 'LBS', load: '', loadU: 'USG', price: '', hours: '' }; }
+    let saveTimer;
+    function persist() {
+      clearTimeout(saveTimer);
+      saveTimer = setTimeout(() => {
+        state.density = $('density').value;
+        state.fee = $('fee').value; state.waiver = $('waiver').value; state.price = $('price').value;
+        state.wNeed = $('w-need').value; state.wNeedU = $('w-need-u').value;
+        state.carry = $('t-carry-check').checked; state.rate = $('t-carry-rate').value;
+        storageSet(LS_STATE, state);
+      }, 250);
+    }
+
+    /* ======================= WAIVER ======================= */
+    function renderWaiver() {
+      const fee = num('fee'), min = num('waiver'), price = num('price');
+      const d = density();
+      const needRaw = num('w-need'), needU = $('w-need-u').value;
+      const need = toUSG(needRaw, needU, d);
+
+      $('fee-disp').textContent = usd(fee, 2);
+      $('waiver-disp').textContent = fmt(min) + ' USG ≈ ' + fmt(min * d) + ' lb';
+      $('price-disp').textContent = usd(price, 2) + ' / USG';
+      $('w-need-disp').textContent = needRaw > 0 ? (fmt(need) + ' USG ≈ ' + fmt(need * d) + ' lb') : '';
+
+      const r = calcWaiver({ fee, min, price, need });
+      const beTxt = r.valid ? fmt(r.be, 1) : '—';
+      const minTxt = r.valid ? fmt(min) : '—';
+
+      $('be-val').textContent = beTxt;
+      $('be-sub').textContent = r.valid
+        ? 'El fee equivale a ' + fmt(r.feeInGal, 1) + ' USG de combustible (≈ ' + fmt(r.be * d) + ' lb el equilibrio)'
+        : 'Completá fee, mínimo y precio';
+      document.querySelectorAll('.r-be').forEach(el => el.textContent = beTxt);
+      document.querySelectorAll('.r-min').forEach(el => el.textContent = minTxt);
+      $('z-be').textContent = beTxt; $('z-mid1').textContent = beTxt; $('z-mid2').textContent = minTxt; $('z-min').textContent = minTxt;
+      $('tick-be').textContent = beTxt; $('tick-min').textContent = minTxt;
+
+      // Escala proporcional real: de 0 a 1,3 × el mínimo (o hasta lo necesitado si es mayor)
+      let yPct = 33.3, rPct = 33.3, gPct = 33.4;
+      const marker = $('scale-marker');
+      if (r.valid) {
+        const top = Math.max(min * 1.3, (need || 0) * 1.1);
+        yPct = (r.be / top) * 100;
+        rPct = ((min - r.be) / top) * 100;
+        gPct = 100 - yPct - rPct;
+        if (need > 0) { marker.style.display = 'block'; marker.style.left = Math.min(99, (need / top) * 100) + '%'; }
+        else marker.style.display = 'none';
+      } else marker.style.display = 'none';
+      $('seg-yellow').style.width = yPct + '%';
+      $('seg-red').style.width = rPct + '%';
+      $('seg-green').style.width = gPct + '%';
+      // Si un segmento es muy angosto, se oculta el texto para que no quede cortado feo
+      [['seg-yellow', yPct], ['seg-red', rPct], ['seg-green', gPct]].forEach(([id, p]) => $(id).style.color = p < 30 ? 'transparent' : '');
+      $('tick-be').style.left = Math.min(92, Math.max(8, yPct)) + '%';
+      $('tick-min').style.left = Math.min(92, Math.max(8, yPct + rPct)) + '%';
+      $('tick-be').style.display = r.valid && r.be > 0 ? '' : 'none';
+
+      ['yellow', 'red', 'green'].forEach(z => $('zone-' + z).classList.toggle('current', r.valid && r.zone === z));
+
+      const v = $('w-verdict');
+      if (!r.valid) {
+        v.className = 'verdict neutral';
+        v.innerHTML = '<div class="verdict-title">Faltan datos del FBO</div><div class="verdict-body">Completá handling fee, mínimo y precio arriba.</div>';
+        return;
+      }
+      if (!(need > 0)) {
+        v.className = 'verdict neutral';
+        v.innerHTML = '<div class="verdict-title">Ingresá cuánto necesitás</div><div class="verdict-body">Te decimos qué te conviene y cuánto te sale cada opción.</div>';
+        return;
+      }
+      const rowJusto = '<tr class="' + (r.action === 'pay-fee' ? 'best' : '') + '"><td>Cargar ' + fmt(need) + ' USG + fee</td><td>' + usd(r.costJusto, 2) + '</td></tr>';
+      const rowMin = '<tr class="' + (r.action === 'load-min' ? 'best' : '') + '"><td>Cargar el mínimo (' + fmt(min) + ' USG), sin fee</td><td>' + usd(r.costMin, 2) + '</td></tr>';
+      let title, body, table = '';
+      if (r.zone === 'green') {
+        title = '🟢 CARGA TRANQUILO';
+        body = 'Con ' + fmt(need) + ' USG ya pasás el mínimo: el fee de ' + usd(fee, 2) + ' queda bonificado. Total: <strong>' + usd(r.costMin, 2) + '</strong>.';
+      } else if (r.zone === 'yellow') {
+        title = '🟡 CARGA LO JUSTO Y PAGÁ EL FEE';
+        body = 'Te faltan ' + fmt(r.extraGal) + ' USG para el mínimo y comprarlos sale más que el fee. Ahorrás <strong>' + usd(r.saving, 2) + '</strong> vs. estirarte al mínimo.';
+        table = '<table class="cmp">' + rowJusto + rowMin + '</table>';
+      } else {
+        title = '🔴 NO PAGUES EL FEE: CARGÁ ' + fmt(min) + ' USG';
+        body = 'Cargando ' + fmt(r.extraGal) + ' USG más llegás al mínimo y te ahorrás <strong>' + usd(r.saving, 2) + '</strong>. Ese combustible extra te lo llevás en los tanques.';
+        table = '<table class="cmp">' + rowJusto + rowMin + '</table>';
+      }
+      v.className = 'verdict ' + r.zone;
+      v.innerHTML = '<div class="verdict-title">' + title + '</div><div class="verdict-body">' + body + '</div>' + table;
+    }
+
+    /* ======================= TANKERING ======================= */
+    function unitSelect(id, value, aria) {
+      return '<select id="' + id + '" aria-label="' + aria + '">' +
+        ['LBS', 'USG', 'LTS'].map(u => '<option value="' + u + '"' + (u === value ? ' selected' : '') + '>' + u + '</option>').join('') +
+        '</select>';
+    }
+
+    function renderLegForms() {
+      const n = state.legs.length;
+      $('legs').innerHTML = state.legs.map((l, i) => {
+        const k = i + 1;
+        const isLast = i === n - 1;
+        return '<section class="card" style="margin-bottom:14px;">' +
+          '<div class="leg-head"><span class="section-title">Tramo ' + k + (isLast && n > 1 ? ' <span style="text-transform:none; font-weight:600;">(destino)</span>' : '') + '</span>' +
+          '<div class="right"><input type="text" class="icao" id="l' + i + '-icao" maxlength="4" placeholder="OACI" aria-label="OACI tramo ' + k + '" value="' + esc(l.icao) + '" />' +
+          (n > 2 ? '<button type="button" class="icon-btn" data-remove="' + i + '" aria-label="Quitar tramo ' + k + '">✕</button>' : '') +
+          '</div></div>' +
+          '<div class="input-item"><div class="input-header"><label for="l' + i + '-need">Combustible necesitado</label><span class="hint num" id="l' + i + '-need-disp"></span></div>' +
+          '<div class="input-row"><input type="text" inputmode="decimal" id="l' + i + '-need" placeholder="0" value="' + esc(l.need) + '" />' + unitSelect('l' + i + '-needU', l.needU, 'Unidad necesitado') + '</div></div>' +
+          '<div class="input-item"><div class="input-header"><label for="l' + i + '-load">Combustible realmente cargado</label><span class="hint num" id="l' + i + '-load-disp"></span></div>' +
+          '<div class="input-row"><input type="text" inputmode="decimal" id="l' + i + '-load" placeholder="0" value="' + esc(l.load) + '" />' + unitSelect('l' + i + '-loadU', l.loadU, 'Unidad cargado') + '</div>' +
+          '<div class="field-warn" id="l' + i + '-warn"></div></div>' +
+          '<div class="input-item"><div class="input-header"><label for="l' + i + '-price">Precio (USD/USG)</label><span class="hint num" id="l' + i + '-price-disp"></span></div>' +
+          '<input type="text" inputmode="decimal" id="l' + i + '-price" placeholder="0.00" value="' + esc(l.price) + '" /></div>' +
+          (!isLast ? '<div class="input-item carry-only" style="display:none;"><div class="input-header"><label for="l' + i + '-hours">Horas de vuelo del tramo</label><span class="hint">para el acarreo</span></div>' +
+            '<input type="text" inputmode="decimal" id="l' + i + '-hours" class="small-in" placeholder="1.5" value="' + esc(l.hours) + '" /></div>' : '') +
+          '</section>';
+      }).join('');
+      $('btn-add-leg').style.display = n >= MAX_LEGS ? 'none' : 'block';
+      $('btn-add-leg').textContent = '+ Agregar tramo ' + (n + 1);
+    }
+
+    function readLegs() {
+      const d = density();
+      return state.legs.map((l, i) => {
+        l.icao = $('l' + i + '-icao').value.trim().toUpperCase();
+        l.need = $('l' + i + '-need').value; l.needU = $('l' + i + '-needU').value;
+        l.load = $('l' + i + '-load').value; l.loadU = $('l' + i + '-loadU').value;
+        l.price = $('l' + i + '-price').value;
+        const h = $('l' + i + '-hours'); l.hours = h ? h.value : '';
+        const p = (s) => { const v = parseN(s); return Number.isFinite(v) ? Math.max(0, v) : 0; };
+        const hrs = parseN(l.hours);
+        return {
+          icao: l.icao || ('Tramo ' + (i + 1)),
+          needUSG: toUSG(p(l.need), l.needU, d),
+          loadUSG: toUSG(p(l.load), l.loadU, d),
+          price: p(l.price),
+          hours: Number.isFinite(hrs) ? Math.max(0, hrs) : 1.5,
+        };
+      });
+    }
+
+    let lastTank = null;
+    function renderTankering() {
+      const d = density();
+      const legs = readLegs();
+      const carry = $('t-carry-check').checked;
+      const rateV = parseN($('t-carry-rate').value);
+      const ratePct = Number.isFinite(rateV) ? rateV : 3;
+      $('t-carry-fields').style.display = carry ? 'block' : 'none';
+      document.querySelectorAll('.carry-only').forEach(el => el.style.display = carry ? 'block' : 'none');
+
+      legs.forEach((l, i) => {
+        $('l' + i + '-need-disp').textContent = l.needUSG > 0 ? fmt(l.needUSG) + ' USG ≈ ' + fmt(l.needUSG * d) + ' lb' : '';
+        $('l' + i + '-load-disp').textContent = l.loadUSG > 0 ? fmt(l.loadUSG) + ' USG ≈ ' + fmt(l.loadUSG * d) + ' lb' : '';
+        $('l' + i + '-price-disp').textContent = l.price > 0 ? usd(l.price, 2) + ' / USG' : '';
+      });
+
+      const r = calcTankering({ legs, carry, ratePct });
+
+      // Advertencias por tramo
+      r.steps.forEach((s, i) => { $('l' + i + '-warn').textContent = s.short ? '⚠️ Cargaste menos de lo necesario para el tramo.' : ''; });
+      $('l' + (legs.length - 1) + '-warn').textContent = r.lastShort ? '⚠️ Cargaste menos de lo necesario para el tramo.'
+        : (r.lastExtra > 0 ? 'ℹ️ El extra del último tramo no se cuenta: agregá el tramo siguiente con su precio para calcularlo.' : '');
+
+      // Alertas globales
+      const alerts = [];
+      r.steps.forEach(s => {
+        if (s.priced && s.extra > 0 && s.saving < 0) {
+          const why = s.diff <= 0
+            ? 'En ' + esc(s.to) + ' (' + usd(s.pTo, 2) + ') el combustible está igual o más barato que en ' + esc(s.from) + ' (' + usd(s.pFrom, 2) + ').'
+            : 'La diferencia de precio no alcanza a cubrir lo que se quema por acarreo.';
+          alerts.push('<div class="alert loss"><strong class="t">⚠️ ' + esc(s.from) + ' → ' + esc(s.to) + ': TANKEREAR ACÁ TE HACE PERDER</strong>' +
+            why + ' Perdés <strong>' + usd(Math.abs(s.saving), 0) + '</strong>. Cargá solo lo justo en ' + esc(s.from) + '.</div>');
+        }
+      });
+      $('t-alerts').innerHTML = alerts.join('');
+
+      // Resultado
+      const tv = $('t-sav-val');
+      tv.textContent = usd(Math.round(r.total));
+      tv.style.color = r.total > 0.5 ? 'var(--emerald)' : r.total < -0.5 ? 'var(--rose)' : 'var(--text)';
+      $('t-sav-sub').textContent = r.ready
+        ? (carry ? 'Ahorro neto (descontado acarreo ' + usd(r.carryTotal, 0) + '): ' : 'Ahorro exacto: ') + usd(r.total, 2)
+        : 'Completá los tramos arriba para ver el ahorro';
+
+      $('t-steps').innerHTML = r.steps.map((s, i) => {
+        if (!(s.extra > 0)) return '';
+        const cls = !s.priced ? '' : s.saving >= 0 ? 'pos' : 'neg';
+        let h = '<div class="step-box ' + cls + '"><div class="step-title">✈️ ' + (i + 1) + '. ' + esc(s.from) + ' → ' + esc(s.to) + '</div>';
+        h += '<div class="kv"><span>Extra que subiste en ' + esc(s.from) + ':</span><strong>+' + fmt(s.extra) + ' USG (' + fmt(s.extra * d) + ' lb)</strong></div>';
+        if (s.priced) {
+          h += '<div class="kv"><span>Precio ' + esc(s.from) + ' → ' + esc(s.to) + ':</span><span>' + usd(s.pFrom, 2) + ' → ' + usd(s.pTo, 2) + ' (' + (s.diff >= 0 ? '+' : '−') + fmt(Math.abs(s.diff), 2) + '/USG)</span></div>';
+          if (carry && s.burnUSG > 0) {
+            h += '<div class="kv"><span>Se quema por acarreo:</span><span>−' + fmt(s.burnUSG, 1) + ' USG (' + usd(s.carryCost, 0) + ')</span></div>';
+          }
+          h += '<div class="kv"><span>Precio máx. en ' + esc(s.from) + ' para que convenga:</span><strong>' + usd(s.beOriginPrice, 2) + '</strong></div>';
+          h += '<div class="kv total"><span>Ahorro del tramo:</span><span class="mono">' + usd(s.saving, 2) + '</span></div>';
+        } else {
+          h += '<div class="kv" style="color:var(--text-muted);"><span>Cargá los precios de ' + esc(s.from) + ' y ' + esc(s.to) + ' para calcular.</span></div>';
+        }
+        return h + '</div>';
+      }).join('');
+
+      $('btn-open-save').disabled = !r.ready;
+      lastTank = r.ready ? {
+        route: legs.map(l => l.icao).join(' → '),
+        extraUSG: r.extraTotal,
+        savings: r.total,
+        carryUSD: r.carryTotal,
+        isCarry: carry,
+        density: d,
+        legs: legs.map(l => ({ icao: l.icao, price: l.price, needUSG: Math.round(l.needUSG), loadUSG: Math.round(l.loadUSG) })),
+      } : null;
+    }
+
+    /* ======================= BITÁCORA ======================= */
+    function getLog() { const l = storageGet(LS_BITACORA, []); return Array.isArray(l) ? l : []; }
+    function entryDate(e) {
+      if (e.dateISO) return e.dateISO;
+      // Registros viejos: "dd/mm/aaaa"
+      const m = /^(\d{1,2})\/(\d{1,2})\/(\d{4})$/.exec(e.dateStr || '');
+      return m ? m[3] + '-' + m[2].padStart(2, '0') + '-' + m[1].padStart(2, '0') : '';
+    }
+    function todayISO() { const d = new Date(); return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); }
+    function showDate(iso) { if (!iso) return '—'; const [y, m, d] = iso.split('-'); return d + '/' + m + '/' + y; }
+
+    function saveFlight(e) {
+      e.preventDefault();
+      if (!lastTank) { toast('Completá los datos de los tramos antes de guardar.'); return; }
+      const reg = $('s-reg').value.trim().toUpperCase();
+      if (!reg) { $('s-reg').focus(); toast('Ingresá la matrícula.'); return; }
+      const iso = $('s-date').value || todayISO();
+      const d = lastTank.density;
+      const entry = {
+        id: 'log-' + Date.now(),
+        dateISO: iso,
+        dateStr: showDate(iso),
+        registration: reg,
+        flightNumber: $('s-flt').value.trim().toUpperCase(),
+        route: lastTank.route,
+        extraUSG: Math.round(lastTank.extraUSG),
+        extraLbs: Math.round(lastTank.extraUSG * d),
+        extraLts: Math.round(lastTank.extraUSG * LTS_PER_USG),
+        totalSavingsUSD: Number(lastTank.savings.toFixed(2)),
+        carryCostUSD: Number(lastTank.carryUSD.toFixed(2)),
+        useCarryCost: lastTank.isCarry,
+        legs: lastTank.legs,
+      };
+      const log = getLog();
+      log.push(entry);
+      if (!storageSet(LS_BITACORA, log)) { toast('No se pudo guardar (almacenamiento bloqueado).'); return; }
+      state.lastReg = reg; persist();
+      $('save-form').classList.remove('open');
+      $('s-flt').value = '';
+      toast('✅ Vuelo guardado en la bitácora');
+      location.hash = 'bitacora';
+    }
+
+    function deleteEntry(id) {
+      const log = getLog();
+      const it = log.find(i => i.id === id);
+      if (!it) return;
+      if (!confirm('¿Eliminar el vuelo ' + it.registration + ' ' + it.route + '?')) return;
+      storageSet(LS_BITACORA, log.filter(i => i.id !== id));
+      renderBitacora();
+      toast('Vuelo eliminado');
+    }
+
+    function filteredLog() {
+      const reg = $('b-filter-reg').value, month = $('b-filter-month').value;
+      return getLog()
+        .map(e => ({ ...e, _iso: entryDate(e) }))
+        .filter(e => (!reg || e.registration === reg) && (!month || e._iso.slice(0, 7) === month))
+        .sort((a, b) => (b._iso.localeCompare(a._iso)) || (String(b.id).localeCompare(String(a.id))));
+    }
+
+    function fillSelect(sel, values, allLabel, labelFn) {
+      const cur = sel.value;
+      sel.innerHTML = '<option value="">' + allLabel + '</option>' + values.map(v => '<option value="' + esc(v) + '">' + esc(labelFn ? labelFn(v) : v) + '</option>').join('');
+      if (values.includes(cur)) sel.value = cur;
+    }
+
+    function renderBitacora() {
+      const all = getLog();
+      const regs = [...new Set(all.map(e => e.registration).filter(Boolean))].sort();
+      const months = [...new Set(all.map(e => entryDate(e).slice(0, 7)).filter(Boolean))].sort().reverse();
+      const monthName = (m) => { const [y, mm] = m.split('-'); return new Date(+y, +mm - 1, 1).toLocaleDateString('es-AR', { month: 'long', year: 'numeric' }); };
+      fillSelect($('b-filter-reg'), regs, 'Todas');
+      fillSelect($('b-filter-month'), months, 'Todos', monthName);
+
+      const items = filteredLog();
+      const totalSav = items.reduce((a, b) => a + (Number(b.totalSavingsUSD) || 0), 0);
+      const totalUSG = items.reduce((a, b) => a + (Number(b.extraUSG) || 0), 0);
+      $('b-kpi-sav').textContent = usd(Math.round(totalSav));
+      $('b-kpi-sav').style.color = totalSav < 0 ? 'var(--rose)' : 'var(--emerald-dark)';
+      $('b-kpi-usg').textContent = fmt(totalUSG) + ' USG';
+      $('b-kpi-cnt').textContent = items.length;
+
+      if (!items.length) {
+        $('b-list').innerHTML = '<div class="empty">' + (all.length ? 'No hay vuelos con ese filtro.' : 'No hay vuelos guardados todavía.<br><span style="font-size:0.7rem; font-weight:400; color:#64748b;">Calculá un tankering y tocá "Guardar vuelo".</span>') + '</div>';
+        return;
+      }
+      $('b-list').innerHTML = items.map(it => {
+        const sav = Number(it.totalSavingsUSD) || 0;
+        return '<div class="log-item">' +
+          '<div class="log-top"><div style="display:flex; align-items:center; gap:6px;"><span class="reg mono">' + esc(it.registration) + '</span>' +
+          (it.flightNumber ? '<span style="font-size:0.72rem; font-weight:700; color:#64748b;">' + esc(it.flightNumber) + '</span>' : '') + '</div>' +
+          '<div style="display:flex; align-items:center; gap:4px;"><span style="font-size:0.7rem; color:var(--text-faint);">📅 ' + esc(showDate(it._iso) || it.dateStr) + '</span>' +
+          '<button type="button" class="del-btn" data-del="' + esc(it.id) + '" aria-label="Eliminar vuelo">✕</button></div></div>' +
+          '<div style="display:flex; justify-content:space-between; align-items:center; gap:8px;">' +
+          '<div><div style="font-weight:800;">' + esc(it.route) + '</div>' +
+          '<div class="mono" style="color:#64748b; font-size:0.7rem;">+' + fmt(it.extraUSG) + ' USG (≈ ' + fmt(it.extraLbs) + ' lb)</div></div>' +
+          '<div style="text-align:right;"><div class="mono" style="font-weight:900; font-size:0.92rem; color:' + (sav < 0 ? 'var(--rose)' : 'var(--emerald-dark)') + ';">' + (sav >= 0 ? '+' : '') + usd(Math.round(sav)) + '</div>' +
+          '<div style="font-size:0.65rem; color:var(--text-faint);">' + (it.useCarryCost ? 'Neto c/acarreo' : 'Ahorro directo') + '</div></div>' +
+          '</div></div>';
+      }).join('');
+    }
+
+    function exportCSV() {
+      const items = filteredLog();
+      if (!items.length) { toast('No hay vuelos para exportar.'); return; }
+      // Separador ";" y coma decimal: Excel en español lo abre en columnas directamente
+      const dec = (n, d) => (Number(n) || 0).toFixed(d).replace('.', ',');
+      const headers = ['Fecha', 'Matrícula', 'Vuelo', 'Ruta', 'Galones tankereados (USG)', 'Libras (lb)', 'Litros (L)', 'Ahorro (USD)', 'Costo acarreo (USD)', 'Acarreo aplicado', 'Precios (USD/USG)'];
+      const rows = items.map(b => [
+        showDate(b._iso) || b.dateStr, b.registration, b.flightNumber || '', b.route,
+        b.extraUSG, b.extraLbs, b.extraLts, dec(b.totalSavingsUSD, 2), dec(b.carryCostUSD, 2),
+        b.useCarryCost ? 'SI' : 'NO',
+        Array.isArray(b.legs) ? b.legs.map(l => l.icao + ' ' + dec(l.price, 2)).join(' | ') : '',
+      ]);
+      const csv = '﻿' + [headers, ...rows].map(r => r.map(csvCell).join(';')).join('\r\n');
+      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'Flyzar_Bitacora_' + todayISO() + '.csv';
+      document.body.appendChild(a); a.click(); a.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
+    }
+
+    /* ======================= INIT ======================= */
+    function init() {
+      $('density').value = state.density ?? '';
+      $('fee').value = state.fee ?? ''; $('waiver').value = state.waiver ?? ''; $('price').value = state.price ?? '';
+      $('w-need').value = state.wNeed ?? ''; $('w-need-u').value = state.wNeedU || 'USG';
+      $('t-carry-check').checked = !!state.carry; $('t-carry-rate').value = state.rate ?? '';
+      $('reg-list').innerHTML = KNOWN_REGS.map(r => '<option value="' + r + '">').join('');
+
+      renderLegForms();
+
+      document.addEventListener('input', (e) => {
+        const t = e.target;
+        if (t.matches('input[inputmode=decimal]')) markInvalid(t);
+        if (t.closest('#view-waiver')) renderWaiver();
+        if (t.closest('#view-tankering') && !t.closest('#save-form')) renderTankering();
+        if (t.id === 'density') { renderWaiver(); renderTankering(); }
+        persist();
+      });
+      document.addEventListener('change', (e) => {
+        if (e.target.closest('#view-waiver')) renderWaiver();
+        if (e.target.closest('#view-tankering') && !e.target.closest('#save-form')) renderTankering();
+        if (e.target.closest('#view-bitacora')) renderBitacora();
+        persist();
+      });
+
+      $('btn-add-leg').addEventListener('click', () => {
+        readLegs();
+        if (state.legs.length >= MAX_LEGS) return;
+        state.legs.push(newLeg());
+        renderLegForms(); renderTankering(); persist();
+        $('l' + (state.legs.length - 1) + '-icao').focus();
+      });
+      $('legs').addEventListener('click', (e) => {
+        const b = e.target.closest('[data-remove]');
+        if (!b) return;
+        readLegs();
+        state.legs.splice(+b.getAttribute('data-remove'), 1);
+        renderLegForms(); renderTankering(); persist();
+      });
+      $('btn-reset-tank').addEventListener('click', () => {
+        if (!confirm('¿Borrar todos los datos de los tramos?')) return;
+        state.legs = [newLeg(), newLeg()];
+        renderLegForms(); renderTankering(); persist();
+      });
+      $('btn-print').addEventListener('click', () => {
+        $('print-date').textContent = new Date().toLocaleString('es-AR');
+        window.print();
+      });
+      $('btn-open-save').addEventListener('click', () => {
+        const f = $('save-form');
+        f.classList.toggle('open');
+        if (f.classList.contains('open')) {
+          if (!$('s-reg').value) $('s-reg').value = state.lastReg || '';
+          if (!$('s-date').value) $('s-date').value = todayISO();
+          $('s-reg').focus();
+        }
+      });
+      $('btn-cancel-save').addEventListener('click', () => $('save-form').classList.remove('open'));
+      $('save-form').addEventListener('submit', saveFlight);
+      $('btn-export').addEventListener('click', exportCSV);
+      $('b-list').addEventListener('click', (e) => { const b = e.target.closest('[data-del]'); if (b) deleteEntry(b.getAttribute('data-del')); });
+
+      document.querySelectorAll('input[inputmode=decimal]').forEach(markInvalid);
+      renderWaiver();
+      renderTankering();
+      showView(location.hash.slice(1));
+    }
+    init();
+  </script>
+</body>
+</html>
