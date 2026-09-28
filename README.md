@@ -15,6 +15,8 @@ No necesita servidor ni build: abrir `index.html` en el navegador o publicarlo t
 - Entre el equilibrio y el mínimo → cargá el mínimo (sale más barato que fee + lo justo).
 - Mínimo o más → fee bonificado.
 
+Opción **"El extra lo aprovecho después"**: los galones que cargás de más para llegar al mínimo quedan en los tanques y no los comprás en tu próxima carga. Cada galón extra cuesta entonces solo `precio − precio_próxima_carga`, y el equilibrio pasa a ser `mínimo − fee / (precio − precio_próxima)`. Si acá el combustible está igual o más barato que en la próxima carga, el equilibrio es 0: siempre conviene llegar al mínimo (verificando capacidad de tanques y pesos).
+
 **Tankering** (por cada tramo A → B):
 - `extra = cargado − necesitado` en A.
 - Con acarreo: se quema `extra × tasa × horas`; llega `extra × (1 − tasa × horas)`.
@@ -34,6 +36,7 @@ No necesita servidor ni build: abrir `index.html` en el navegador o publicarlo t
 - `1.500,5` o `1,500.5` ahora se interpretan bien; entradas no numéricas se marcan en rojo.
 
 **Mejoras**
+- Waiver: opción "El extra lo aprovecho después" con el precio de la próxima carga.
 - Waiver: nuevo campo "¿Cuánto necesitás cargar?" que da la recomendación directa, el costo de cada opción y cuánto se ahorra; la barra ahora es proporcional real y marca dónde caés.
 - Tankering: tramos dinámicos (2 a 5), aviso si se cargó menos de lo necesario, alerta de pérdida por tramo, precio máximo en origen para que convenga.
 - Densidad configurable (lb/USG) en Ajustes; antes fija en 6,7.

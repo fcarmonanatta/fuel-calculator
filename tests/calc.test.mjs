@@ -91,3 +91,19 @@ test('csvCell escapa separadores y comillas', () => {
   assert.equal(csvCell('a;b'), '"a;b"');
   assert.equal(csvCell('di "hola"'), '"di ""hola"""');
 });
+
+test('waiver aprovechando el extra: el galón extra cuesta p − pNext', () => {
+  // fee 300, mínimo 200, precio 6, próxima carga a 5 → cada galón extra cuesta 1 → equilibrio 0
+  const base = { fee: 300, min: 200, price: 6, nextPrice: 5 };
+  assert.equal(calcWaiver(base).be, 0);
+  const r = calcWaiver({ ...base, need: 50 });
+  assert.equal(r.zone, 'red');
+  close(r.costJusto, 600); close(r.credit, 750); close(r.costMin, 450); close(r.saving, 150);
+  // próxima carga a 3 → galón extra cuesta 3 → equilibrio 200 − 100 = 100
+  close(calcWaiver({ ...base, nextPrice: 3 }).be, 100);
+  assert.equal(calcWaiver({ ...base, nextPrice: 3, need: 80 }).zone, 'yellow');
+  // más barato acá que en la próxima → siempre el mínimo
+  assert.equal(calcWaiver({ ...base, nextPrice: 7 }).be, 0);
+  // sin nextPrice se comporta como antes
+  close(calcWaiver({ fee: 300, min: 200, price: 6, nextPrice: 0 }).be, 150);
+});

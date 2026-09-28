@@ -232,6 +232,23 @@
           <div class="input-header"><label for="price">Fuel Price (USD/USG)</label><span class="hint num" id="price-disp"></span></div>
           <input type="text" inputmode="decimal" id="price" placeholder="0.00" />
         </div>
+        <div class="toggle-card" style="margin-top:14px;">
+          <label class="row" for="w-later">
+            <div style="display:flex; align-items:center; gap:8px;">
+              <span style="font-size:1.1rem;" aria-hidden="true">🛢️</span>
+              <div>
+                <div style="font-size:0.8rem; font-weight:800;">El extra lo aprovecho después</div>
+                <div style="font-size:0.7rem; color:#64748b;">Lo que cargues de más para llegar al mínimo queda en los tanques y no lo comprás en tu próxima carga</div>
+              </div>
+            </div>
+            <input type="checkbox" id="w-later" />
+          </label>
+          <div id="w-later-fields" style="display:none; margin-top:10px; padding-top:10px; border-top:1px dashed var(--border);">
+            <div class="input-header"><label for="w-next">Precio en tu próxima carga (USD/USG)</label><span class="hint num" id="w-next-disp"></span></div>
+            <input type="text" inputmode="decimal" id="w-next" class="small-in" placeholder="0.00" />
+            <div class="field-help">Si acá está igual o más barato que en tu próxima carga, siempre conviene llegar al mínimo. Chequeá que el extra entre en los tanques y en los pesos.</div>
+          </div>
+        </div>
       </section>
 
       <section class="card">
@@ -276,7 +293,7 @@
         <div class="section-title">Reglas de decisión</div>
         <div class="rule-card rule-yellow">
           <div class="rule-title">🟡 Menos de <span class="r-be">—</span> USG — CARGA LO JUSTO</div>
-          <div><strong>Pagá el handling fee y cargá lo justo.</strong> Llegar al mínimo te sale más caro que el fee.</div>
+          <div><strong>Pagá el handling fee y cargá lo justo.</strong> Llegar al mínimo te sale más caro que el fee<span class="r-later-note"></span>.</div>
         </div>
         <div class="rule-card rule-red">
           <div class="rule-title">🔴 Entre <span class="r-be">—</span> y <span class="r-min">—</span> USG — NO CARGUES JUSTO</div>
@@ -428,15 +445,25 @@
      * Punto de equilibrio del waiver.
      * Cargar x < mínimo cuesta fee + x·p. Cargar el mínimo cuesta mín·p.
      * Conviene estirarse al mínimo cuando x ≥ mín − fee/p  (= punto de equilibrio).
+     *
+     * Si el extra se aprovecha después (nextPrice > 0), esos galones no se compran
+     * en la próxima carga, así que cada galón extra cuesta solo (p − pNext):
+     *   equilibrio = mín − fee/(p − pNext);  si p ≤ pNext siempre conviene el mínimo.
      */
-    function calcWaiver({ fee, min, price, need }) {
+    function calcWaiver({ fee, min, price, need, nextPrice }) {
       if (!(price > 0) || !(min > 0) || !(fee >= 0)) return { valid: false };
       const feeInGal = fee / price;
-      const be = Math.max(0, min - feeInGal);
-      const res = { valid: true, feeInGal, be, min, price, fee };
+      const useLater = nextPrice > 0;
+      const extraCostPerGal = useLater ? price - nextPrice : price;
+      const be = extraCostPerGal > 0 ? Math.max(0, min - fee / extraCostPerGal) : 0;
+      const res = { valid: true, feeInGal, be, min, price, fee, useLater, nextPrice: useLater ? nextPrice : 0, extraCostPerGal };
       if (need > 0) {
         const costJusto = (need >= min ? 0 : fee) + need * price;
-        const costMin = Math.max(need, min) * price;
+        const extra = Math.max(0, min - need);
+        const credit = useLater ? extra * nextPrice : 0;
+        const costMin = Math.max(need, min) * price - credit;
+        res.costMinGross = Math.max(need, min) * price;
+        res.credit = credit;
         let zone, action;
         if (need >= min) { zone = 'green'; action = 'load-need'; }
         else if (need < be) { zone = 'yellow'; action = 'pay-fee'; }
@@ -565,6 +592,7 @@
         state.density = $('density').value;
         state.fee = $('fee').value; state.waiver = $('waiver').value; state.price = $('price').value;
         state.wNeed = $('w-need').value; state.wNeedU = $('w-need-u').value;
+        state.wLater = $('w-later').checked; state.wNext = $('w-next').value;
         state.carry = $('t-carry-check').checked; state.rate = $('t-carry-rate').value;
         storageSet(LS_STATE, state);
       }, 250);
@@ -582,14 +610,20 @@
       $('price-disp').textContent = usd(price, 2) + ' / USG';
       $('w-need-disp').textContent = needRaw > 0 ? (fmt(need) + ' USG ≈ ' + fmt(need * d) + ' lb') : '';
 
-      const r = calcWaiver({ fee, min, price, need });
+      const later = $('w-later').checked;
+      const next = later ? num('w-next') : 0;
+      $('w-later-fields').style.display = later ? 'block' : 'none';
+      $('w-next-disp').textContent = next > 0 ? usd(next, 2) + ' / USG' : '';
+      const r = calcWaiver({ fee, min, price, need, nextPrice: next });
+      document.querySelectorAll('.r-later-note').forEach(el => el.textContent = r.useLater ? ', aun descontando lo que no comprás después' : '');
       const beTxt = r.valid ? fmt(r.be, 1) : '—';
       const minTxt = r.valid ? fmt(min) : '—';
 
       $('be-val').textContent = beTxt;
-      $('be-sub').textContent = r.valid
-        ? 'El fee equivale a ' + fmt(r.feeInGal, 1) + ' USG de combustible (≈ ' + fmt(r.be * d) + ' lb el equilibrio)'
-        : 'Completá fee, mínimo y precio';
+      $('be-sub').textContent = !r.valid ? 'Completá fee, mínimo y precio'
+        : !r.useLater ? 'El fee equivale a ' + fmt(r.feeInGal, 1) + ' USG de combustible (≈ ' + fmt(r.be * d) + ' lb el equilibrio)'
+        : r.extraCostPerGal <= 0 ? 'Acá está igual o más barato que en tu próxima carga: siempre conviene llegar al mínimo'
+        : 'Aprovechando el extra, cada galón de más te cuesta ' + usd(r.extraCostPerGal, 2) + ' (≈ ' + fmt(r.be * d) + ' lb el equilibrio)';
       document.querySelectorAll('.r-be').forEach(el => el.textContent = beTxt);
       document.querySelectorAll('.r-min').forEach(el => el.textContent = minTxt);
       $('z-be').textContent = beTxt; $('z-mid1').textContent = beTxt; $('z-mid2').textContent = minTxt; $('z-min').textContent = minTxt;
@@ -616,6 +650,10 @@
       $('tick-be').style.display = r.valid && r.be > 0 ? '' : 'none';
 
       ['yellow', 'red', 'green'].forEach(z => $('zone-' + z).classList.toggle('current', r.valid && r.zone === z));
+      // Con equilibrio en 0 la zona amarilla no existe: siempre conviene llegar al mínimo
+      const noYellow = r.valid && r.be <= 0;
+      $('zone-yellow').style.opacity = noYellow ? '0.35' : '';
+      document.querySelector('.rule-yellow').style.opacity = noYellow ? '0.35' : '';
 
       const v = $('w-verdict');
       if (!r.valid) {
@@ -629,18 +667,22 @@
         return;
       }
       const rowJusto = '<tr class="' + (r.action === 'pay-fee' ? 'best' : '') + '"><td>Cargar ' + fmt(need) + ' USG + fee</td><td>' + usd(r.costJusto, 2) + '</td></tr>';
-      const rowMin = '<tr class="' + (r.action === 'load-min' ? 'best' : '') + '"><td>Cargar el mínimo (' + fmt(min) + ' USG), sin fee</td><td>' + usd(r.costMin, 2) + '</td></tr>';
+      const rowMin = r.useLater
+        ? '<tr><td>Cargar el mínimo (' + fmt(min) + ' USG), sin fee</td><td>' + usd(r.costMinGross, 2) + '</td></tr>' +
+          '<tr><td>− ' + fmt(r.extraGal) + ' USG que no comprás después (× ' + usd(r.nextPrice, 2) + ')</td><td>−' + usd(r.credit, 2) + '</td></tr>' +
+          '<tr class="' + (r.action === 'load-min' ? 'best' : '') + '"><td><strong>Costo neto del mínimo</strong></td><td>' + usd(r.costMin, 2) + '</td></tr>'
+        : '<tr class="' + (r.action === 'load-min' ? 'best' : '') + '"><td>Cargar el mínimo (' + fmt(min) + ' USG), sin fee</td><td>' + usd(r.costMin, 2) + '</td></tr>';
       let title, body, table = '';
       if (r.zone === 'green') {
         title = '🟢 CARGA TRANQUILO';
         body = 'Con ' + fmt(need) + ' USG ya pasás el mínimo: el fee de ' + usd(fee, 2) + ' queda bonificado. Total: <strong>' + usd(r.costMin, 2) + '</strong>.';
       } else if (r.zone === 'yellow') {
         title = '🟡 CARGA LO JUSTO Y PAGÁ EL FEE';
-        body = 'Te faltan ' + fmt(r.extraGal) + ' USG para el mínimo y comprarlos sale más que el fee. Ahorrás <strong>' + usd(r.saving, 2) + '</strong> vs. estirarte al mínimo.';
+        body = 'Te faltan ' + fmt(r.extraGal) + ' USG para el mínimo y ' + (r.useLater ? 'aun aprovechándolos después, ' : '') + 'comprarlos sale más que el fee. Ahorrás <strong>' + usd(r.saving, 2) + '</strong> vs. estirarte al mínimo.';
         table = '<table class="cmp">' + rowJusto + rowMin + '</table>';
       } else {
         title = '🔴 NO PAGUES EL FEE: CARGÁ ' + fmt(min) + ' USG';
-        body = 'Cargando ' + fmt(r.extraGal) + ' USG más llegás al mínimo y te ahorrás <strong>' + usd(r.saving, 2) + '</strong>. Ese combustible extra te lo llevás en los tanques.';
+        body = 'Cargando ' + fmt(r.extraGal) + ' USG más llegás al mínimo y te ahorrás <strong>' + usd(r.saving, 2) + '</strong>. ' + (r.useLater ? 'Ya está descontado lo que no comprás en tu próxima carga.' : 'Ese combustible extra te lo llevás en los tanques.');
         table = '<table class="cmp">' + rowJusto + rowMin + '</table>';
       }
       v.className = 'verdict ' + r.zone;
@@ -903,6 +945,7 @@
       $('density').value = state.density ?? '';
       $('fee').value = state.fee ?? ''; $('waiver').value = state.waiver ?? ''; $('price').value = state.price ?? '';
       $('w-need').value = state.wNeed ?? ''; $('w-need-u').value = state.wNeedU || 'USG';
+      $('w-later').checked = !!state.wLater; $('w-next').value = state.wNext ?? '';
       $('t-carry-check').checked = !!state.carry; $('t-carry-rate').value = state.rate ?? '';
       $('reg-list').innerHTML = KNOWN_REGS.map(r => '<option value="' + r + '">').join('');
 
