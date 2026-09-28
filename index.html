@@ -3,210 +3,379 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <meta name="theme-color" content="#0f172a" />
+  <meta name="theme-color" content="#2a3440" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-title" content="Flyzar Fuel" />
   <title>Flyzar Fuel Calculator</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20235.2%20272.6%22%20fill%3D%22%232a3440%22%3E%3Cpath%20d%3D%22M64.2%2087.5C52.7%2092.3%2038.6%20100.8%2038.6%20100.8C53.4%2089.8%2068.7%2083.8%2070.0%2083.3C69.9%2082.8%2068.5%2079.3%2056.3%2085.3C56.3%2085.3%2061.5%2077.7%2066.6%2075.4C66.6%2075.4%2064.2%2078.3%2065.2%2080.1C68.6%2078.4%2072.3%2076.9%2075.1%2076.9L75.1%2076.9C76.5%2076.8%2078.2%2077.0%2080.2%2077.5C80.2%2077.5%2076.4%2077.3%2074.7%2078.3C84.0%2078.1%2089.1%2083.2%2089.1%2083.2C83.6%2082.7%2077.7%2083.6%2073.3%2084.5C70.2%2085.2%2067.1%2086.2%2064.2%2087.5M93.2%2039.8C139.7%202.0%20171.1%2048.5%20171.1%2048.5C131.4%2013.8%2093.2%2039.8%2093.2%2039.8M100.2%2067.9C144.7%20100.0%20111.2%20158.4%20111.2%20158.4C133.7%2098.0%20100.2%2067.9%20100.2%2067.9M128.4%2055.9C128.4%2055.9%20131.6%2056.1%20134.5%2058.1C134.5%2058.1%20126.2%2050.7%20117.7%2050.3C117.7%2050.3%20126.0%2041.3%20133.5%2043.4C140.9%2045.4%20145.7%2058.3%20138.2%2074.2C137.7%2075.3%20135.4%2060.0%20128.4%2055.9M12.0%20163.2C12.1%20164.9%2012.3%20166.5%2012.6%20167.9C11.5%20182.6%2020.2%20192.1%2029.5%20198.0C28.5%20194.3%2027.3%20187.4%2030.4%20181.7C30.4%20181.7%2044.0%20203.2%2050.7%20206.6C50.7%20184.2%2067.1%20168.4%2071.6%20163.6C74.1%20161.0%2076.4%20158.1%2078.4%20155.0C85.0%20144.6%2095.5%20123.4%2090.5%2098.6C97.3%20122.4%2092.8%20148.4%2078.4%20168.0C73.2%20175.0%2068.2%20181.4%2065.3%20186.7C64.1%20188.8%2063.0%20191.1%2062.1%20193.5C54.3%20226.2%2098.5%20270.6%2098.5%20270.6C97.1%20247.6%20122.6%20217.8%20122.6%20217.8C118.5%20244.3%20135.7%20262.4%20135.7%20262.4C136.0%20249.4%20158.2%20231.0%20180.7%20195.5C203.2%20160.0%20178.8%20111.0%20178.8%20111.0C200.0%20125.1%20194.6%20178.8%20194.6%20178.8C233.2%20112.2%20166.2%2064.8%20166.2%2064.8C175.9%2065.4%20196.5%2085.6%20196.5%2085.6C196.5%2070.5%20184.2%2021.7%20140.0%2014.7C95.8%207.8%2076.2%2041.9%2076.2%2041.9C77.2%2031.8%2085.3%2020.2%2085.3%2020.2C41.9%2027.1%2037.0%2075.1%2037.0%2075.1C38.6%2076.3%2040.0%2077.9%2040.0%2077.9L34.3%2082.4C33.5%2083.1%2032.7%2083.7%2032.0%2084.4C28.7%2087.4%2019.4%2095.4%2012.9%20102.2C9.1%20106.2%206.2%20109.1%205.6%20109.8C5.5%20109.9%205.4%20110.0%205.3%20110.1C4.5%20111.4%204.1%20112.5%204.1%20113.9C11.6%20114.3%2018.1%20111.1%2024.7%20109.4C31.1%20107.8%2034.0%20112.5%2034.0%20112.5C27.5%20112.4%2021.6%20116.5%2021.6%20116.5C24.7%20115.5%2027.8%20116.4%2027.8%20116.4C25.0%20117.9%2016.9%20127.0%2016.8%20128.9C16.8%20130.8%2023.6%20143.4%2023.6%20143.4C43.5%20143.3%2056.6%20153.8%2056.6%20153.8C55.1%20155.2%2050.5%20155.4%2050.5%20155.4C45.0%20149.0%2021.7%20145.8%2021.7%20145.8C20.6%20146.1%2018.0%20149.1%2015.9%20151.9C13.2%20155.2%2011.8%20159.2%2012.0%20163.2%22/%3E%3Cpath%20d%3D%22M8.1%20119.7C5.4%20119.9%204.3%20120.8%204.3%20120.8C9.7%20121.6%2012.6%20129.2%2013.3%20129.8C14.5%20130.8%2018.8%20143.4%2018.8%20143.4C19.5%20145.6%2016.9%20147.0%2016.9%20147.0C5.7%20144.8%202.0%20119.9%202.0%20119.9C3.5%20118.7%208.1%20119.7%208.1%20119.7%22/%3E%3C/svg%3E" />
+  <link rel="apple-touch-icon" href="data:image/png;base64,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" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <!-- Proxima Nova y Tribun son las tipografías de marca (licencia Adobe Fonts).
+       Si no están instaladas se usan Figtree y Newsreader, sus equivalentes libres más cercanos. -->
+  <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@300;400;500;600;700&family=Newsreader:ital,opsz,wght@1,6..72,400;1,6..72,500&display=swap" rel="stylesheet" />
+  <script>try{var t=localStorage.getItem('flyzar_theme');if(t)document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
   <style>
+    /* ============ Tokens de marca Flyzar (Brandbook) ============
+       Primary:   Dress Blue #2a3440 · #d4d6d4
+       Secondary: #1f2426 · #b0b3b5 · #e9e9e8 · #443a37 · #988d85 · #d4d2d0 */
     :root {
-      --bg: #f8fafc;
-      --card-bg: #ffffff;
-      --border: #e2e8f0;
-      --border-strong: #cbd5e1;
-      --text: #0f172a;
-      --text-muted: #475569;
-      --text-faint: #94a3b8;
-      --primary: #d97706;
-      --primary-soft: #fffbeb;
-      --emerald: #059669;
-      --emerald-dark: #047857;
-      --rose: #e11d48;
-      --blue: #2563eb;
-      --yellow-bg: #fefce8; --yellow-bd: #fde047; --yellow-tx: #713f12;
-      --red-bg: #fff1f2;    --red-bd: #fecdd3;    --red-tx: #881337;
-      --green-bg: #ecfdf5;  --green-bd: #a7f3d0;  --green-tx: #064e3b;
+      --dress-blue: #2a3440;
+      --font-sans: "Proxima Nova", "proxima-nova", "Figtree", system-ui, -apple-system, "Segoe UI", sans-serif;
+      --font-serif: "Tribun ADF Std", "Newsreader", Georgia, "Times New Roman", serif;
+
+      --bg: #e9e9e8;
+      --surface: #ffffff;
+      --surface-2: #f3f3f2;
+      --line: #d4d2d0;
+      --line-strong: #b0b3b5;
+      --ink: #1f2426;
+      --muted: #5f5955;
+      --faint: #988d85;
+      --accent: #2a3440;
+      --on-accent: #ffffff;
+      --brand-band: #2a3440;
+      --on-band: #e9e9e8;
+      --on-band-muted: #b0b3b5;
+
+      /* Semáforo de decisión, en tonos apagados que conviven con la paleta */
+      --go: #3b6a50;   --go-bg: #e6eee8;   --go-line: #b8cdbf;   --go-fill: #4b7c60;
+      --stop: #9a3a31; --stop-bg: #f4e5e2; --stop-line: #e0bfb9; --stop-fill: #a8453b;
+      --wait: #8a611c; --wait-bg: #f4ecdc; --wait-line: #e2cc9f; --wait-fill: #c8a24f;
+
+      --radius: 18px;
+      --radius-sm: 12px;
+      --shadow: 0 1px 2px rgba(31, 36, 38, 0.06), 0 8px 24px -16px rgba(31, 36, 38, 0.18);
+      color-scheme: light;
     }
+    @media (prefers-color-scheme: dark) {
+      :root:not([data-theme="light"]) {
+        --bg: #15191b; --surface: #1f2426; --surface-2: #272d31; --line: #343b41; --line-strong: #4b545b;
+        --ink: #e9e9e8; --muted: #b0b3b5; --faint: #8a8580; --accent: #d4d6d4; --on-accent: #1f2426;
+        --brand-band: #2a3440; --on-band: #e9e9e8; --on-band-muted: #b0b3b5;
+        --go: #9cc9ab; --go-bg: #1b2a22; --go-line: #2f4a3a; --go-fill: #4b7c60;
+        --stop: #eba198; --stop-bg: #2f1d1b; --stop-line: #5b302b; --stop-fill: #a8453b;
+        --wait: #e4c07a; --wait-bg: #2c2519; --wait-line: #574527; --wait-fill: #c8a24f;
+        --shadow: none; color-scheme: dark;
+      }
+    }
+    :root[data-theme="dark"] {
+      --bg: #15191b; --surface: #1f2426; --surface-2: #272d31; --line: #343b41; --line-strong: #4b545b;
+      --ink: #e9e9e8; --muted: #b0b3b5; --faint: #8a8580; --accent: #d4d6d4; --on-accent: #1f2426;
+      --brand-band: #2a3440; --on-band: #e9e9e8; --on-band-muted: #b0b3b5;
+      --go: #9cc9ab; --go-bg: #1b2a22; --go-line: #2f4a3a; --go-fill: #4b7c60;
+      --stop: #eba198; --stop-bg: #2f1d1b; --stop-line: #5b302b; --stop-fill: #a8453b;
+      --wait: #e4c07a; --wait-bg: #2c2519; --wait-line: #574527; --wait-fill: #c8a24f;
+      --shadow: none; color-scheme: dark;
+    }
+
     * { box-sizing: border-box; margin: 0; padding: 0; }
     html { -webkit-text-size-adjust: 100%; }
     body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      background-color: var(--bg); color: var(--text);
-      padding: max(14px, env(safe-area-inset-top)) max(14px, env(safe-area-inset-right)) max(24px, env(safe-area-inset-bottom)) max(14px, env(safe-area-inset-left));
+      font-family: var(--font-sans); font-weight: 400; line-height: 1.45;
+      background: var(--bg); color: var(--ink);
+      padding: max(16px, env(safe-area-inset-top)) max(16px, env(safe-area-inset-right)) max(28px, env(safe-area-inset-bottom)) max(16px, env(safe-area-inset-left));
       min-height: 100vh; display: flex; justify-content: center;
+      -webkit-font-smoothing: antialiased;
     }
     button, input, select { font: inherit; color: inherit; }
     button { cursor: pointer; }
-    :focus-visible { outline: 3px solid #fbbf24; outline-offset: 2px; }
-    .container { max-width: 440px; width: 100%; display: flex; flex-direction: column; gap: 14px; }
-    header { display: flex; align-items: center; justify-content: space-between; padding: 4px 0; }
-    h1 { font-size: 1.25rem; font-weight: 800; letter-spacing: -0.01em; }
-    .subtitle { font-size: 0.75rem; color: var(--text-muted); font-weight: 500; }
-    .view { display: none; flex-direction: column; gap: 14px; }
-    .view.active { display: flex; }
-    .card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 18px; padding: 16px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
-    .muted { color: var(--text-muted); }
-    .small { font-size: 0.75rem; }
-    .mono { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-variant-numeric: tabular-nums; }
-    .num { font-variant-numeric: tabular-nums; }
+    :focus-visible { outline: 2px solid var(--faint); outline-offset: 2px; }
+    .container { max-width: 460px; width: 100%; display: flex; flex-direction: column; gap: 14px; }
+    .serif { font-family: var(--font-serif); font-style: italic; font-weight: 400; }
+    .num, .mono { font-variant-numeric: tabular-nums; }
+    .muted { color: var(--muted); }
+    .small { font-size: 0.78rem; }
 
-    .menu-btn { width: 100%; padding: 16px; border-radius: 16px; border: 1px solid var(--border); background: #fff; text-align: left; display: flex; align-items: center; justify-content: space-between; gap: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.04); }
-    .menu-btn:hover { border-color: var(--primary); background: var(--primary-soft); }
-    .menu-btn strong { font-size: 1rem; display: block; margin-bottom: 3px; }
-    .menu-btn span.desc { font-size: 0.78rem; color: var(--text-muted); }
-    .menu-btn .arrow { font-size: 1.3rem; color: var(--text-faint); }
-
-    .nav-bar { display: flex; align-items: center; justify-content: space-between; }
-    .back-btn { background: #f1f5f9; border: 1px solid var(--border-strong); border-radius: 10px; padding: 8px 12px; font-size: 0.8rem; font-weight: 700; }
-    .nav-title { font-size: 0.8rem; font-weight: 700; }
-
-    .section-title { font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); margin-bottom: 12px; }
-    .input-item { margin-bottom: 14px; }
-    .input-item:last-child { margin-bottom: 0; }
-    .input-header { display: flex; justify-content: space-between; gap: 8px; font-size: 0.8rem; font-weight: 700; margin-bottom: 6px; color: #1e293b; }
-    .input-header .hint { font-weight: 600; color: var(--text-muted); text-align: right; }
-    .input-row { display: flex; gap: 6px; }
-    .input-row input { flex: 1; min-width: 0; }
-    input[type=text], select {
-      width: 100%; height: 48px; border-radius: 12px; border: 1px solid var(--border-strong); background: var(--bg);
-      font-size: 1.25rem; font-weight: 700; text-align: center; outline: none;
+    /* ---------- Cabecera de marca ---------- */
+    .brand-bar {
+      background: var(--brand-band); color: var(--on-band); border-radius: var(--radius);
+      padding: 14px 16px; display: flex; align-items: center; justify-content: space-between; gap: 12px;
     }
-    input[type=text]::placeholder { color: var(--border-strong); font-weight: 400; }
-    input[type=text]:focus, select:focus { border-color: var(--primary); background: #fff; }
-    input.invalid { border-color: var(--rose); background: var(--red-bg); }
-    select { width: 72px; flex: none; background: #fff; font-size: 0.8rem; font-weight: 800; }
-    input.icao { width: 84px; height: 34px; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.04em; }
-    input.small-in { height: 38px; font-size: 0.95rem; }
-    .field-help { font-size: 0.7rem; color: var(--text-muted); margin-top: 4px; }
-    .field-warn { font-size: 0.72rem; color: var(--rose); font-weight: 700; margin-top: 4px; }
+    .logo { display: flex; align-items: center; gap: 10px; color: var(--on-band); text-decoration: none; background: none; border: none; padding: 0; }
+    .logo svg { display: block; fill: currentColor; }
+    .logo .lion { width: 30px; height: 35px; }
+    .logo .word { width: 96px; height: 21px; }
+    .brand-meta { display: flex; align-items: center; gap: 10px; }
+    .eyebrow-band { font-size: 0.64rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--on-band-muted); font-weight: 500; }
+    .theme-btn {
+      width: 34px; height: 34px; border-radius: 50%; border: 1px solid rgba(233, 233, 232, 0.25);
+      background: transparent; color: var(--on-band); display: grid; place-items: center; font-size: 0.9rem;
+    }
+    .theme-btn:hover { background: rgba(233, 233, 232, 0.08); }
 
-    .hero-value { font-size: 2.8rem; font-weight: 800; font-variant-numeric: tabular-nums; line-height: 1.05; margin: 4px 0 6px; text-align: center; }
-    .hero-unit { font-size: 1.2rem; font-weight: 700; color: var(--primary); }
-    .hero-sub { font-size: 0.95rem; font-weight: 600; color: var(--text-muted); text-align: center; font-variant-numeric: tabular-nums; margin-bottom: 14px; }
+    /* ---------- Vistas ---------- */
+    .view { display: none; flex-direction: column; gap: 14px; }
+    .view.active { display: flex; animation: fade 0.18s ease-out; }
+    @keyframes fade { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
+    @media (prefers-reduced-motion: reduce) { .view.active { animation: none; } * { transition: none !important; } }
 
-    /* Escala de decisión (proporcional real) */
-    .scale-box { border-top: 1px solid #f1f5f9; padding-top: 14px; }
-    .scale-bar { position: relative; height: 44px; border-radius: 12px; background: var(--border); overflow: hidden; display: flex; border: 2px solid var(--border-strong); }
-    .seg { height: 100%; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 0.66rem; text-transform: uppercase; white-space: nowrap; overflow: hidden; padding: 0 4px; transition: width 0.15s; }
-    .seg-yellow { background: #facc15; color: #451a03; }
-    .seg-red { background: var(--rose); color: #fff; }
-    .seg-green { background: #10b981; color: #fff; }
-    .scale-marker { position: absolute; top: -2px; bottom: -2px; width: 4px; background: #0f172a; border: 1px solid #fff; transform: translateX(-50%); transition: left 0.15s; display: none; }
-    .scale-ticks { position: relative; height: 18px; font-size: 0.66rem; font-weight: 800; color: var(--text-muted); margin-top: 4px; }
-    .scale-ticks span { position: absolute; transform: translateX(-50%); white-space: nowrap; transition: left 0.15s; }
+    .card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 18px; box-shadow: var(--shadow); }
+    .eyebrow { font-size: 0.68rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); }
+    .section-title { font-size: 0.68rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); margin-bottom: 14px; display: flex; align-items: baseline; gap: 8px; }
+    .section-title .n { color: var(--faint); font-variant-numeric: tabular-nums; }
+    .section-title.center { justify-content: center; }
+
+    /* Menú */
+    .hero { padding: 10px 4px 4px; }
+    .hero h2 { font-size: 2rem; font-weight: 300; line-height: 1.08; letter-spacing: -0.01em; margin-top: 8px; }
+    .hero h2 .serif { font-size: 2.2rem; }
+    .hero p { color: var(--muted); font-size: 0.88rem; margin-top: 8px; max-width: 34ch; }
+    .menu { display: flex; flex-direction: column; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden; }
+    .menu-btn {
+      width: 100%; padding: 18px; border: none; border-top: 1px solid var(--line); background: transparent; text-align: left;
+      display: grid; grid-template-columns: 30px 1fr auto; align-items: center; gap: 12px;
+    }
+    .menu-btn:first-child { border-top: none; }
+    .menu-btn:hover { background: var(--surface-2); }
+    .menu-btn .idx { font-size: 0.72rem; color: var(--faint); font-variant-numeric: tabular-nums; font-weight: 500; }
+    .menu-btn strong { font-size: 1.02rem; font-weight: 600; display: block; margin-bottom: 2px; }
+    .menu-btn .desc { font-size: 0.8rem; color: var(--muted); }
+    .menu-btn .arrow { color: var(--faint); font-size: 1.1rem; transition: transform 0.15s; }
+    .menu-btn:hover .arrow { transform: translateX(3px); color: var(--ink); }
+
+    /* Barra de navegación */
+    .nav-bar { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 2px 2px 0; }
+    .back-btn { background: transparent; border: 1px solid var(--line-strong); border-radius: 999px; padding: 7px 14px; font-size: 0.8rem; font-weight: 500; color: var(--ink); }
+    .back-btn:hover { background: var(--surface); }
+    .nav-title { font-size: 1.05rem; font-weight: 300; }
+    .nav-title .serif { font-size: 1.12rem; }
+
+    /* Formularios */
+    .input-item { margin-bottom: 16px; }
+    .input-item:last-child { margin-bottom: 0; }
+    .input-header { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; font-size: 0.82rem; font-weight: 600; margin-bottom: 7px; }
+    .input-header label { flex: 1; min-width: 0; }
+    .input-header .hint { font-weight: 400; font-size: 0.76rem; color: var(--muted); text-align: right; white-space: nowrap; }
+    .input-row { display: flex; gap: 8px; }
+    .input-row input { flex: 1; min-width: 0; }
+    input[type=text], input[type=date], select {
+      width: 100%; height: 52px; border-radius: var(--radius-sm); border: 1px solid var(--line); background: var(--surface-2);
+      font-size: 1.3rem; font-weight: 500; text-align: center; outline: none; font-variant-numeric: tabular-nums;
+      transition: border-color 0.12s, background 0.12s;
+    }
+    input[type=text]::placeholder { color: var(--line-strong); font-weight: 300; }
+    input[type=text]:focus, input[type=date]:focus, select:focus { border-color: var(--accent); background: var(--surface); }
+    input.invalid { border-color: var(--stop); background: var(--stop-bg); }
+    select { width: 78px; flex: none; font-size: 0.8rem; font-weight: 600; letter-spacing: 0.04em; background: var(--surface); }
+    select.full { width: 100%; height: 44px; }
+    input.icao { width: 92px; height: 36px; font-size: 0.9rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; border-radius: 999px; }
+    input.small-in, input[type=date] { height: 44px; font-size: 1rem; }
+    .upper { text-transform: uppercase; }
+    .field-help { font-size: 0.74rem; color: var(--muted); margin-top: 6px; }
+    .field-warn { font-size: 0.76rem; color: var(--stop); font-weight: 600; margin-top: 6px; }
+    .field-warn:empty { display: none; }
+    .lbl, .grid2 label { font-size: 0.72rem; font-weight: 600; color: var(--muted); display: block; margin-bottom: 5px; }
+
+    /* Interruptores */
+    .toggle-card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-sm); padding: 14px; }
+    .card .toggle-card { background: var(--surface-2); border-color: var(--line); margin-top: 16px; }
+    .toggle-card label.row { display: flex; justify-content: space-between; align-items: center; gap: 12px; cursor: pointer; }
+    .toggle-title { font-size: 0.86rem; font-weight: 600; }
+    .toggle-desc { font-size: 0.74rem; color: var(--muted); margin-top: 2px; }
+    .toggle-body { display: none; margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--line); }
+    input.switch {
+      appearance: none; -webkit-appearance: none; flex: none; width: 44px; height: 26px; border-radius: 999px;
+      background: var(--line-strong); position: relative; cursor: pointer; transition: background 0.15s;
+    }
+    input.switch::after { content: ""; position: absolute; top: 3px; left: 3px; width: 20px; height: 20px; border-radius: 50%; background: #fff; box-shadow: 0 1px 2px rgba(0,0,0,0.25); transition: transform 0.15s; }
+    input.switch:checked { background: var(--accent); }
+    input.switch:checked::after { transform: translateX(18px); background: var(--on-accent); }
+
+    /* Resultados grandes */
+    .hero-value { font-size: 3rem; font-weight: 300; font-variant-numeric: tabular-nums; line-height: 1.05; margin: 2px 0 8px; text-align: center; letter-spacing: -0.02em; }
+    .hero-value.is-pos { color: var(--go); }
+    .hero-value.is-neg { color: var(--stop); }
+    .hero-unit { font-family: var(--font-serif); font-style: italic; font-size: 1.4rem; color: var(--faint); letter-spacing: 0; }
+    .hero-sub { font-size: 0.86rem; color: var(--muted); text-align: center; font-variant-numeric: tabular-nums; margin: 0 auto 16px; max-width: 36ch; }
+
+    /* Escala de decisión */
+    .scale-box { border-top: 1px solid var(--line); padding-top: 16px; }
+    .scale-bar { position: relative; height: 40px; border-radius: 999px; overflow: hidden; display: flex; background: var(--surface-2); }
+    .seg { height: 100%; display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 0.64rem; letter-spacing: 0.08em; text-transform: uppercase; white-space: nowrap; overflow: hidden; padding: 0 4px; transition: width 0.2s; }
+    .seg-yellow { background: var(--wait-fill); color: #2b1f08; }
+    .seg-red { background: var(--stop-fill); color: #fff; }
+    .seg-green { background: var(--go-fill); color: #fff; }
+    .scale-marker { position: absolute; top: 4px; bottom: 4px; width: 4px; border-radius: 2px; background: var(--ink); box-shadow: 0 0 0 2px var(--surface); transform: translateX(-50%); transition: left 0.2s; display: none; }
+    .scale-ticks { position: relative; height: 18px; font-size: 0.7rem; font-weight: 600; color: var(--muted); margin-top: 6px; font-variant-numeric: tabular-nums; }
+    .scale-ticks span { position: absolute; transform: translateX(-50%); white-space: nowrap; transition: left 0.2s; }
     .zones { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-top: 10px; text-align: center; }
-    .zone { padding: 8px 5px; border-radius: 10px; border: 1px solid; font-size: 0.68rem; font-weight: 900; display: flex; flex-direction: column; gap: 4px; }
-    .zone .range { font-size: 0.66rem; font-weight: 700; padding-top: 4px; border-top: 1px solid rgba(0,0,0,0.06); }
-    .zone.yellow { background: var(--yellow-bg); border-color: var(--yellow-bd); color: var(--yellow-tx); }
-    .zone.red { background: var(--red-bg); border-color: var(--red-bd); color: var(--red-tx); }
-    .zone.green { background: var(--green-bg); border-color: var(--green-bd); color: var(--green-tx); }
-    .zone.current { outline: 3px solid #0f172a; outline-offset: 1px; }
+    .zone { padding: 10px 6px; border-radius: var(--radius-sm); border: 1px solid; font-size: 0.66rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; display: flex; flex-direction: column; gap: 5px; align-items: center; transition: opacity 0.15s; }
+    .zone .range { font-size: 0.72rem; font-weight: 500; letter-spacing: 0; text-transform: none; font-variant-numeric: tabular-nums; }
+    .zone.yellow { background: var(--wait-bg); border-color: var(--wait-line); color: var(--wait); }
+    .zone.red { background: var(--stop-bg); border-color: var(--stop-line); color: var(--stop); }
+    .zone.green { background: var(--go-bg); border-color: var(--go-line); color: var(--go); }
+    .zone.current { box-shadow: 0 0 0 2px var(--surface), 0 0 0 4px currentColor; }
+    .dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: currentColor; flex: none; }
 
-    .verdict { border-radius: 14px; padding: 14px; border: 2px solid; }
-    .verdict.yellow { background: var(--yellow-bg); border-color: #eab308; color: var(--yellow-tx); }
-    .verdict.red { background: var(--red-bg); border-color: var(--rose); color: var(--red-tx); }
-    .verdict.green { background: var(--green-bg); border-color: var(--emerald); color: var(--green-tx); }
-    .verdict.neutral { background: #f1f5f9; border-color: var(--border-strong); color: var(--text-muted); }
-    .verdict-title { font-weight: 900; font-size: 0.95rem; margin-bottom: 6px; }
-    .verdict-body { font-size: 0.8rem; line-height: 1.45; }
-    .cmp { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 0.78rem; background: rgba(255,255,255,0.7); border-radius: 8px; overflow: hidden; }
-    .cmp td { padding: 6px 8px; border-top: 1px solid rgba(0,0,0,0.06); }
-    .cmp td:last-child { text-align: right; font-weight: 800; font-variant-numeric: tabular-nums; }
-    .cmp tr.best td { background: rgba(16,185,129,0.15); }
+    /* Veredicto */
+    .verdict { border-radius: var(--radius-sm); padding: 16px; border: 1px solid; border-left-width: 4px; }
+    .verdict.yellow { background: var(--wait-bg); border-color: var(--wait-line); border-left-color: var(--wait-fill); color: var(--wait); }
+    .verdict.red { background: var(--stop-bg); border-color: var(--stop-line); border-left-color: var(--stop-fill); color: var(--stop); }
+    .verdict.green { background: var(--go-bg); border-color: var(--go-line); border-left-color: var(--go-fill); color: var(--go); }
+    .verdict.neutral { background: var(--surface-2); border-color: var(--line); border-left-color: var(--line-strong); color: var(--muted); }
+    .verdict-title { font-weight: 700; font-size: 0.8rem; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 6px; display: flex; align-items: center; gap: 8px; }
+    .verdict-body { font-size: 0.86rem; line-height: 1.5; color: var(--ink); }
+    .cmp { width: 100%; border-collapse: collapse; margin-top: 12px; font-size: 0.8rem; background: var(--surface); border-radius: 10px; overflow: hidden; color: var(--ink); }
+    .cmp td { padding: 9px 10px; border-top: 1px solid var(--line); vertical-align: top; }
+    .cmp tr:first-child td { border-top: none; }
+    .cmp td:last-child { text-align: right; font-weight: 600; font-variant-numeric: tabular-nums; white-space: nowrap; }
+    .cmp tr.best td { background: var(--go-bg); color: var(--go); font-weight: 600; }
 
-    .rule-card { padding: 12px 14px; border-radius: 12px; margin-bottom: 10px; font-size: 0.8rem; line-height: 1.45; }
+    /* Reglas */
+    .rule-card { padding: 12px 14px; border-radius: var(--radius-sm); margin-bottom: 8px; font-size: 0.84rem; line-height: 1.5; background: var(--surface-2); border-left: 3px solid; transition: opacity 0.15s; }
     .rule-card:last-child { margin-bottom: 0; }
-    .rule-yellow { background: var(--yellow-bg); border-left: 4px solid #eab308; color: var(--yellow-tx); }
-    .rule-red { background: var(--red-bg); border-left: 4px solid var(--rose); color: var(--red-tx); }
-    .rule-green { background: var(--green-bg); border-left: 4px solid var(--emerald); color: var(--green-tx); }
-    .rule-title { font-weight: 800; font-size: 0.82rem; margin-bottom: 3px; }
+    .rule-yellow { border-left-color: var(--wait-fill); }
+    .rule-red { border-left-color: var(--stop-fill); }
+    .rule-green { border-left-color: var(--go-fill); }
+    .rule-title { font-weight: 700; font-size: 0.72rem; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 4px; }
+    .rule-title .dot { vertical-align: 1px; margin-right: 6px; }
+    .rule-yellow .rule-title { color: var(--wait); }
+    .rule-red .rule-title { color: var(--stop); }
+    .rule-green .rule-title { color: var(--go); }
 
-    .leg-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; gap: 8px; }
+    /* Tramos */
+    .leg { margin-bottom: 14px; }
+    .leg-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; gap: 8px; }
     .leg-head .section-title { margin-bottom: 0; }
+    .leg-head .tag { text-transform: none; letter-spacing: 0; font-weight: 400; font-family: var(--font-serif); font-style: italic; font-size: 0.9rem; color: var(--faint); }
     .leg-head .right { display: flex; gap: 6px; align-items: center; }
-    .icon-btn { background: #fee2e2; border: none; border-radius: 8px; color: #b91c1c; font-weight: 800; width: 34px; height: 34px; }
-    .dashed-btn { width: 100%; height: 44px; border-radius: 12px; border: 2px dashed var(--border-strong); background: #fff; font-weight: 700; font-size: 0.82rem; }
-    .toggle-card { background: #fff; border: 1px solid var(--border); border-radius: 14px; padding: 12px 14px; }
-    .toggle-card label.row { display: flex; justify-content: space-between; align-items: center; gap: 10px; cursor: pointer; }
-    .toggle-card input[type=checkbox] { width: 20px; height: 20px; accent-color: var(--emerald); flex: none; }
+    .icon-btn { background: transparent; border: 1px solid var(--line); border-radius: 50%; color: var(--muted); width: 36px; height: 36px; font-size: 0.8rem; }
+    .icon-btn:hover { color: var(--stop); border-color: var(--stop-line); background: var(--stop-bg); }
+    .dashed-btn { width: 100%; height: 48px; border-radius: var(--radius-sm); border: 1px dashed var(--line-strong); background: transparent; font-weight: 500; font-size: 0.86rem; color: var(--ink); }
+    .dashed-btn:hover { background: var(--surface); }
+    .dashed-btn.quiet { color: var(--muted); border-style: solid; border-color: transparent; }
 
-    .alert { border-radius: 14px; padding: 12px 14px; border: 2px solid; font-size: 0.78rem; line-height: 1.4; }
-    .alert strong.t { display: block; font-size: 0.85rem; font-weight: 900; margin-bottom: 4px; }
-    .alert.loss { background: var(--red-bg); border-color: #f43f5e; color: var(--red-tx); }
-    .alert.warn { background: var(--yellow-bg); border-color: #eab308; color: var(--yellow-tx); }
+    .alert { border-radius: var(--radius-sm); padding: 14px; border: 1px solid; border-left-width: 4px; font-size: 0.84rem; line-height: 1.5; }
+    .alert strong.t { display: block; font-size: 0.74rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 4px; }
+    .alert.loss { background: var(--stop-bg); border-color: var(--stop-line); border-left-color: var(--stop-fill); color: var(--stop); }
+    .alert.loss > span { color: var(--ink); }
 
-    .step-box { background: #f8fafc; border: 1px solid var(--border); border-radius: 12px; padding: 12px; margin-bottom: 10px; font-size: 0.78rem; color: #334155; }
-    .step-box.pos { background: var(--green-bg); border-color: var(--green-bd); color: var(--green-tx); }
-    .step-box.neg { background: var(--red-bg); border-color: var(--red-bd); color: var(--red-tx); }
-    .step-title { font-weight: 800; margin-bottom: 6px; font-size: 0.82rem; }
-    .kv { display: flex; justify-content: space-between; gap: 8px; margin-bottom: 3px; }
-    .kv.total { padding-top: 5px; margin-top: 4px; border-top: 1px dashed var(--border-strong); font-weight: 800; }
-    .note { font-size: 0.73rem; color: #64748b; background: #f8fafc; padding: 8px 10px; border-radius: 10px; border: 1px solid var(--border); line-height: 1.4; }
+    .step-box { background: var(--surface-2); border-radius: var(--radius-sm); padding: 14px; margin-bottom: 10px; font-size: 0.82rem; border-left: 3px solid var(--line-strong); }
+    .step-box.pos { border-left-color: var(--go-fill); }
+    .step-box.neg { border-left-color: var(--stop-fill); }
+    .step-title { font-weight: 600; margin-bottom: 8px; font-size: 0.9rem; display: flex; align-items: baseline; gap: 8px; }
+    .step-n { font-size: 0.7rem; color: var(--faint); font-variant-numeric: tabular-nums; }
+    .kv { display: flex; justify-content: space-between; gap: 10px; margin-bottom: 4px; color: var(--muted); }
+    .kv > :last-child { color: var(--ink); text-align: right; font-variant-numeric: tabular-nums; }
+    .kv strong { font-weight: 600; }
+    .kv.total { padding-top: 8px; margin-top: 6px; border-top: 1px solid var(--line); font-weight: 600; color: var(--ink); }
+    .step-box.pos .kv.total > :last-child { color: var(--go); }
+    .step-box.neg .kv.total > :last-child { color: var(--stop); }
+    .note { font-size: 0.78rem; color: var(--muted); padding: 10px 12px; border-radius: 10px; border: 1px solid var(--line); line-height: 1.45; }
+    .note strong { color: var(--ink); font-weight: 600; }
 
+    /* Botones */
     .btn-row { display: flex; gap: 8px; }
-    .btn { flex: 1; height: 44px; border-radius: 12px; border: none; color: #fff; font-weight: 800; font-size: 0.82rem; display: flex; align-items: center; justify-content: center; gap: 6px; }
-    .btn:disabled { opacity: 0.45; cursor: not-allowed; }
-    .btn.green { background: var(--emerald); }
-    .btn.blue { background: var(--blue); }
-    .btn.ghost { background: #f1f5f9; color: var(--text); border: 1px solid var(--border-strong); }
-    .btn.soft-blue { background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe; }
+    .btn { flex: 1; height: 48px; border-radius: var(--radius-sm); border: 1px solid transparent; font-weight: 600; font-size: 0.86rem; display: flex; align-items: center; justify-content: center; gap: 8px; }
+    .btn:disabled { opacity: 0.4; cursor: not-allowed; }
+    .btn.primary { background: var(--accent); color: var(--on-accent); }
+    .btn.primary:not(:disabled):hover { filter: brightness(1.12); }
+    .btn.ghost { background: transparent; color: var(--ink); border-color: var(--line-strong); }
+    .btn.ghost:hover { background: var(--surface-2); }
+    .btn svg { width: 16px; height: 16px; }
 
-    .save-form { display: none; margin-top: 12px; padding-top: 12px; border-top: 1px dashed var(--border-strong); }
+    .save-form { display: none; margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--line); }
     .save-form.open { display: block; }
-    .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-    .grid2 label, .lbl { font-size: 0.7rem; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 4px; }
+    .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 
-    .kpis { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; padding: 12px 8px; text-align: center; }
-    .kpi-l { font-size: 0.65rem; font-weight: 700; color: #64748b; text-transform: uppercase; }
-    .kpi-v { font-size: 0.95rem; font-weight: 900; }
-    .log-item { background: #fff; border: 1px solid var(--border); border-radius: 14px; padding: 12px; display: flex; flex-direction: column; gap: 6px; font-size: 0.78rem; }
-    .log-top { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #f1f5f9; padding-bottom: 6px; gap: 8px; }
-    .reg { background: #dbeafe; color: #1e40af; font-weight: 900; font-size: 0.75rem; padding: 2px 6px; border-radius: 6px; }
-    .del-btn { background: none; border: none; color: var(--text-faint); font-weight: 800; font-size: 0.9rem; padding: 4px 6px; }
-    .del-btn:hover { color: var(--rose); }
-    .empty { background: #fff; border: 2px dashed var(--border-strong); border-radius: 14px; padding: 24px; text-align: center; color: var(--text-faint); font-size: 0.8rem; font-weight: 700; }
+    /* Bitácora */
+    .kpi-hero { background: var(--brand-band); color: var(--on-band); border-radius: var(--radius); padding: 20px 18px; }
+    .kpi-hero .eyebrow { color: var(--on-band-muted); }
+    .kpi-big { font-size: 2.6rem; font-weight: 300; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; margin: 4px 0 14px; }
+    .kpi-big.is-neg { color: #eba198; }
+    .kpi-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; border-top: 1px solid rgba(233, 233, 232, 0.14); padding-top: 12px; }
+    .kpi-l { font-size: 0.64rem; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; color: var(--on-band-muted); }
+    .kpi-v { font-size: 1.15rem; font-weight: 400; font-variant-numeric: tabular-nums; }
+    .log-list { display: flex; flex-direction: column; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow); }
+    .log-list:empty { display: none; }
+    .log-item { padding: 14px 16px; display: flex; flex-direction: column; gap: 8px; font-size: 0.82rem; border-top: 1px solid var(--line); }
+    .log-item:first-child { border-top: none; }
+    .log-top { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+    .log-id { display: flex; align-items: center; gap: 8px; }
+    .reg { border: 1px solid var(--line-strong); font-weight: 600; font-size: 0.72rem; letter-spacing: 0.06em; padding: 2px 8px; border-radius: 999px; }
+    .flt { font-size: 0.74rem; color: var(--muted); }
+    .log-date { font-size: 0.74rem; color: var(--muted); font-variant-numeric: tabular-nums; }
+    .log-body { display: flex; justify-content: space-between; align-items: flex-end; gap: 10px; }
+    .log-route { font-weight: 600; font-size: 0.92rem; letter-spacing: 0.02em; }
+    .log-sub { color: var(--muted); font-size: 0.74rem; font-variant-numeric: tabular-nums; }
+    .log-sav { font-size: 1.05rem; font-weight: 500; font-variant-numeric: tabular-nums; text-align: right; color: var(--go); }
+    .log-sav.is-neg { color: var(--stop); }
+    .log-kind { font-size: 0.68rem; color: var(--faint); text-align: right; }
+    .del-btn { background: none; border: none; color: var(--faint); font-size: 0.85rem; padding: 4px 6px; border-radius: 6px; }
+    .del-btn:hover { color: var(--stop); background: var(--stop-bg); }
+    .empty { background: var(--surface); border: 1px dashed var(--line-strong); border-radius: var(--radius); padding: 28px 20px; text-align: center; color: var(--muted); font-size: 0.86rem; }
+    .empty .serif { display: block; font-size: 1.3rem; color: var(--ink); margin-bottom: 4px; }
 
-    .toast { position: fixed; left: 50%; bottom: max(20px, env(safe-area-inset-bottom)); transform: translateX(-50%) translateY(20px); background: #0f172a; color: #fff; padding: 10px 16px; border-radius: 12px; font-size: 0.82rem; font-weight: 700; opacity: 0; pointer-events: none; transition: all 0.2s; z-index: 100; max-width: calc(100% - 32px); text-align: center; }
+    footer { text-align: center; padding: 10px 0 0; color: var(--faint); font-size: 0.8rem; }
+    footer .serif { font-size: 0.95rem; }
+
+    .toast { position: fixed; left: 50%; bottom: max(20px, env(safe-area-inset-bottom)); transform: translateX(-50%) translateY(20px); background: var(--dress-blue); color: #e9e9e8; padding: 11px 18px; border-radius: 999px; font-size: 0.84rem; font-weight: 500; opacity: 0; pointer-events: none; transition: all 0.2s; z-index: 100; max-width: calc(100% - 32px); text-align: center; box-shadow: 0 8px 24px -8px rgba(0,0,0,0.4); }
     .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
     .print-only { display: none; }
     @media print {
-      body { background: #fff; padding: 0; }
-      .no-print, .nav-bar, .btn-row, .dashed-btn, .icon-btn, .save-form, .toast { display: none !important; }
+      :root { --bg: #fff; --surface: #fff; --surface-2: #f5f5f4; --shadow: none; }
+      body { padding: 0; }
+      .no-print, .nav-bar, .btn-row, .dashed-btn, .icon-btn, .save-form, .toast, .theme-btn, footer { display: none !important; }
       .print-only { display: block; }
-      .card, .step-box, .alert { box-shadow: none; break-inside: avoid; }
+      .card, .step-box, .alert { break-inside: avoid; }
       .container { max-width: 100%; }
       * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
     }
   </style>
 </head>
 <body>
+  <!-- Logo Flyzar (vectores extraídos del Brandbook) -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <symbol id="fz-lion" viewBox="0 0 235.2 272.6"><path d="M64.2 87.5C52.7 92.3 38.6 100.8 38.6 100.8C53.4 89.8 68.7 83.8 70.0 83.3C69.9 82.8 68.5 79.3 56.3 85.3C56.3 85.3 61.5 77.7 66.6 75.4C66.6 75.4 64.2 78.3 65.2 80.1C68.6 78.4 72.3 76.9 75.1 76.9L75.1 76.9C76.5 76.8 78.2 77.0 80.2 77.5C80.2 77.5 76.4 77.3 74.7 78.3C84.0 78.1 89.1 83.2 89.1 83.2C83.6 82.7 77.7 83.6 73.3 84.5C70.2 85.2 67.1 86.2 64.2 87.5M93.2 39.8C139.7 2.0 171.1 48.5 171.1 48.5C131.4 13.8 93.2 39.8 93.2 39.8M100.2 67.9C144.7 100.0 111.2 158.4 111.2 158.4C133.7 98.0 100.2 67.9 100.2 67.9M128.4 55.9C128.4 55.9 131.6 56.1 134.5 58.1C134.5 58.1 126.2 50.7 117.7 50.3C117.7 50.3 126.0 41.3 133.5 43.4C140.9 45.4 145.7 58.3 138.2 74.2C137.7 75.3 135.4 60.0 128.4 55.9M12.0 163.2C12.1 164.9 12.3 166.5 12.6 167.9C11.5 182.6 20.2 192.1 29.5 198.0C28.5 194.3 27.3 187.4 30.4 181.7C30.4 181.7 44.0 203.2 50.7 206.6C50.7 184.2 67.1 168.4 71.6 163.6C74.1 161.0 76.4 158.1 78.4 155.0C85.0 144.6 95.5 123.4 90.5 98.6C97.3 122.4 92.8 148.4 78.4 168.0C73.2 175.0 68.2 181.4 65.3 186.7C64.1 188.8 63.0 191.1 62.1 193.5C54.3 226.2 98.5 270.6 98.5 270.6C97.1 247.6 122.6 217.8 122.6 217.8C118.5 244.3 135.7 262.4 135.7 262.4C136.0 249.4 158.2 231.0 180.7 195.5C203.2 160.0 178.8 111.0 178.8 111.0C200.0 125.1 194.6 178.8 194.6 178.8C233.2 112.2 166.2 64.8 166.2 64.8C175.9 65.4 196.5 85.6 196.5 85.6C196.5 70.5 184.2 21.7 140.0 14.7C95.8 7.8 76.2 41.9 76.2 41.9C77.2 31.8 85.3 20.2 85.3 20.2C41.9 27.1 37.0 75.1 37.0 75.1C38.6 76.3 40.0 77.9 40.0 77.9L34.3 82.4C33.5 83.1 32.7 83.7 32.0 84.4C28.7 87.4 19.4 95.4 12.9 102.2C9.1 106.2 6.2 109.1 5.6 109.8C5.5 109.9 5.4 110.0 5.3 110.1C4.5 111.4 4.1 112.5 4.1 113.9C11.6 114.3 18.1 111.1 24.7 109.4C31.1 107.8 34.0 112.5 34.0 112.5C27.5 112.4 21.6 116.5 21.6 116.5C24.7 115.5 27.8 116.4 27.8 116.4C25.0 117.9 16.9 127.0 16.8 128.9C16.8 130.8 23.6 143.4 23.6 143.4C43.5 143.3 56.6 153.8 56.6 153.8C55.1 155.2 50.5 155.4 50.5 155.4C45.0 149.0 21.7 145.8 21.7 145.8C20.6 146.1 18.0 149.1 15.9 151.9C13.2 155.2 11.8 159.2 12.0 163.2"/><path d="M8.1 119.7C5.4 119.9 4.3 120.8 4.3 120.8C9.7 121.6 12.6 129.2 13.3 129.8C14.5 130.8 18.8 143.4 18.8 143.4C19.5 145.6 16.9 147.0 16.9 147.0C5.7 144.8 2.0 119.9 2.0 119.9C3.5 118.7 8.1 119.7 8.1 119.7"/></symbol>
+    <symbol id="fz-word" viewBox="0 0 492.3 105.6"><path d="M166.8 44.1L174.8 42.3L178.8 41.4L179.8 41.2L172.6 18.7C169.6 9.5 161.1 3.3 151.4 3.3L164.8 44.5C165.4 44.4 166.1 44.2 166.8 44.1"/><path d="M198.9 37.4C204.0 36.4 209.1 35.5 214.2 34.6L235.2 3.3C224.3 3.3 214.2 8.8 208.3 17.9L195.4 38.1L198.9 37.4"/><path d="M103.3 60.6C104.5 60.2 105.8 59.9 107.1 59.5L113.8 21.1C115.5 11.8 108.3 3.3 98.9 3.3L87.9 65.4C93.0 63.8 98.1 62.2 103.3 60.6"/><path d="M486.8 10.7C486.2 9.8 485.6 9.0 484.8 8.3C480.3 4.1 471.7 2.0 459.1 2.0C443.4 2.0 431.2 2.4 422.5 3.3L420.8 12.8C442.8 11.7 464.8 11.0 486.8 10.7"/><path d="M361.3 16.4C367.8 15.9 374.3 15.4 380.7 15.0L379.8 8.1C379.5 4.9 377.6 3.3 374.1 3.3L356.4 3.3C353.0 3.3 350.5 4.9 349.1 8.1L344.3 17.8C350.0 17.3 355.6 16.8 361.3 16.4"/><path d="M283.9 24.1C291.3 23.2 298.8 22.3 306.2 21.5L309.2 18.1L311.8 3.3L243.4 3.3C242.1 11.0 248.0 18.1 255.8 18.1L289.2 18.1L283.9 24.1"/><path d="M23.6 85.1L28.1 59.8L53.2 59.8C61.4 59.8 68.5 53.9 69.9 45.7L30.5 45.7L33.9 26.5C34.5 23.4 35.5 21.2 37.0 20.0C38.4 18.7 40.8 18.1 44.0 18.1L66.9 18.1C74.7 18.1 81.5 12.8 83.4 5.2L83.6 4.3C75.3 3.4 61.2 3.0 41.3 3.0C34.7 3.0 29.2 4.8 24.7 8.2C20.2 11.7 17.4 16.5 16.3 22.7L2.0 103.6C12.7 103.4 21.7 95.6 23.6 85.1"/><path d="M302.5 25.8C294.8 26.8 287.2 27.9 279.6 29.0L227.5 88.5L224.9 103.3L280.2 103.3C288.9 103.3 296.3 97.0 297.8 88.5L247.5 88.5L302.5 25.8"/><path d="M365.0 18.7C365.1 20.1 365.3 22.4 365.5 25.6L369.4 60.1L341.1 60.1L357.1 25.6L360.0 19.2C354.3 19.7 348.5 20.3 342.8 20.9L302.3 103.3C313.6 103.3 323.9 96.7 328.7 86.5L334.1 75.0L371.2 75.0L372.3 84.8C373.5 95.3 382.4 103.3 393.0 103.3L381.0 17.2C375.7 17.7 370.3 18.2 365.0 18.7"/><path d="M470.1 32.4C469.0 38.5 467.1 42.7 464.3 44.9C461.6 47.1 457.0 48.3 450.5 48.4L432.5 48.4L438.0 16.9L456.0 16.9C462.5 16.9 466.7 18.0 468.7 20.1C470.7 22.2 471.2 26.3 470.1 32.4M420.6 14.2L404.9 103.3C415.2 103.3 424.1 95.8 425.9 85.6L429.9 63.1L447.8 63.3C453.7 63.3 457.1 66.3 457.8 72.3L458.8 84.1C459.7 94.9 468.7 103.3 479.6 103.3L479.6 103.3L476.1 72.0C475.9 67.6 474.8 64.2 472.7 61.8C470.6 59.4 468.2 57.9 465.4 57.2L465.6 56.5C472.4 55.6 477.6 53.1 481.2 49.0C484.8 44.9 487.3 39.0 488.7 31.3C490.3 22.1 489.7 15.2 486.9 10.8C464.7 11.6 442.6 12.7 420.6 14.2"/><path d="M200.1 43.2L190.8 45.2L185.1 54.2L183.9 54.2L181.7 47.3L180.2 47.6L176.2 48.5L166.8 50.8C166.8 50.8 166.8 50.8 166.8 50.8L172.7 69.2L166.7 103.3C177.2 103.3 186.1 95.7 188.0 85.4L190.8 69.5L209.7 41.2C206.5 41.9 203.3 42.5 200.1 43.2"/><path d="M104.2 86.4C103.2 85.2 102.9 83.0 103.5 79.9L105.5 68.1C99.1 70.2 92.7 72.4 86.3 74.7L84.8 82.8C82.4 96.6 88.7 103.5 103.6 103.5C113.3 103.5 121.8 103.4 129.1 103.1C137.4 102.8 144.3 96.5 145.3 88.2L110.5 88.2C107.4 88.2 105.2 87.6 104.2 86.4"/></symbol>
+  </svg>
+
   <div class="container">
-    <header>
-      <div>
-        <h1>FLYZAR FUEL CALCULATOR</h1>
-        <div class="subtitle">Herramienta de Combustible</div>
+    <header class="brand-bar">
+      <button class="logo" data-go="menu" aria-label="Flyzar — inicio">
+        <svg class="lion" aria-hidden="true"><use href="#fz-lion" /></svg>
+        <svg class="word" aria-hidden="true"><use href="#fz-word" /></svg>
+      </button>
+      <div class="brand-meta">
+        <span class="eyebrow-band">Fuel Tools</span>
+        <button type="button" class="theme-btn" id="btn-theme" aria-label="Cambiar tema" title="Tema: automático">◐</button>
       </div>
     </header>
 
     <!-- ============ MENÚ ============ -->
     <div id="view-menu" class="view">
-      <button class="menu-btn" data-go="waiver">
-        <div><strong>Punto de equilibrio para waivear</strong><span class="desc">¿Pago el handling fee o cargo el mínimo?</span></div>
-        <span class="arrow" aria-hidden="true">→</span>
-      </button>
-      <button class="menu-btn" data-go="tankering">
-        <div><strong>Calculadora de ahorro tankereando</strong><span class="desc">Cuánto te ahorrás llevando combustible barato</span></div>
-        <span class="arrow" aria-hidden="true">→</span>
-      </button>
-      <button class="menu-btn" data-go="bitacora">
-        <div><strong>Registro de ahorro</strong><span class="desc">Bitácora de vuelos tankereados y total ahorrado</span></div>
-        <span class="arrow" aria-hidden="true" style="color: var(--blue);">→</span>
-      </button>
+      <div class="hero">
+        <div class="eyebrow">Fuel Calculator</div>
+        <h2>Cada galón,<br /><span class="serif">bien pensado.</span></h2>
+        <p>Decidí cuánto cargar, cuándo waivear y cuánto ahorra la flota tankereando.</p>
+      </div>
+
+      <nav class="menu">
+        <button class="menu-btn" data-go="waiver">
+          <span class="idx">01</span>
+          <div><strong>Punto de equilibrio</strong><span class="desc">¿Pago el handling fee o cargo el mínimo?</span></div>
+          <span class="arrow" aria-hidden="true">→</span>
+        </button>
+        <button class="menu-btn" data-go="tankering">
+          <span class="idx">02</span>
+          <div><strong>Ahorro tankereando</strong><span class="desc">Cuánto te ahorrás llevando combustible barato</span></div>
+          <span class="arrow" aria-hidden="true">→</span>
+        </button>
+        <button class="menu-btn" data-go="bitacora">
+          <span class="idx">03</span>
+          <div><strong>Registro de ahorro</strong><span class="desc">Bitácora de vuelos y total ahorrado</span></div>
+          <span class="arrow" aria-hidden="true">→</span>
+        </button>
+      </nav>
 
       <section class="card">
         <div class="section-title">Ajustes</div>
         <div class="input-item">
           <div class="input-header"><label for="density">Densidad del combustible</label><span class="hint">lb / USG</span></div>
           <input type="text" inputmode="decimal" id="density" placeholder="6.7" />
-          <div class="field-help">Jet A-1 ≈ 6.7 lb/USG (varía con la temperatura: 6.5–6.9). Se usa en todas las conversiones LBS ↔ USG.</div>
+          <div class="field-help">Jet A-1 ≈ 6,7 lb/USG (varía con la temperatura: 6,5–6,9). Se usa en todas las conversiones LBS ↔ USG.</div>
         </div>
       </section>
     </div>
@@ -214,14 +383,14 @@
     <!-- ============ PUNTO DE EQUILIBRIO / WAIVER ============ -->
     <div id="view-waiver" class="view">
       <div class="nav-bar">
-        <button class="back-btn" data-go="menu">← Volver al Menú</button>
-        <span class="nav-title">Punto de Equilibrio</span>
+        <button class="back-btn" data-go="menu">← Menú</button>
+        <span class="nav-title">Punto de <span class="serif">equilibrio</span></span>
       </div>
 
       <section class="card">
-        <div class="section-title">1. Datos del FBO</div>
+        <div class="section-title"><span class="n">01</span> Datos del FBO</div>
         <div class="input-item">
-          <div class="input-header"><label for="fee">Handling Fee (USD)</label><span class="hint num" id="fee-disp"></span></div>
+          <div class="input-header"><label for="fee">Handling fee (USD)</label><span class="hint num" id="fee-disp"></span></div>
           <input type="text" inputmode="decimal" id="fee" placeholder="0" />
         </div>
         <div class="input-item">
@@ -229,21 +398,18 @@
           <input type="text" inputmode="decimal" id="waiver" placeholder="0" />
         </div>
         <div class="input-item">
-          <div class="input-header"><label for="price">Fuel Price (USD/USG)</label><span class="hint num" id="price-disp"></span></div>
+          <div class="input-header"><label for="price">Precio del combustible (USD/USG)</label><span class="hint num" id="price-disp"></span></div>
           <input type="text" inputmode="decimal" id="price" placeholder="0.00" />
         </div>
-        <div class="toggle-card" style="margin-top:14px;">
+        <div class="toggle-card">
           <label class="row" for="w-later">
-            <div style="display:flex; align-items:center; gap:8px;">
-              <span style="font-size:1.1rem;" aria-hidden="true">🛢️</span>
-              <div>
-                <div style="font-size:0.8rem; font-weight:800;">El extra lo aprovecho después</div>
-                <div style="font-size:0.7rem; color:#64748b;">Lo que cargues de más para llegar al mínimo queda en los tanques y no lo comprás en tu próxima carga</div>
-              </div>
+            <div>
+              <div class="toggle-title">El extra lo aprovecho después</div>
+              <div class="toggle-desc">Lo que cargues de más para llegar al mínimo queda en los tanques y no lo comprás en tu próxima carga</div>
             </div>
-            <input type="checkbox" id="w-later" />
+            <input type="checkbox" class="switch" id="w-later" />
           </label>
-          <div id="w-later-fields" style="display:none; margin-top:10px; padding-top:10px; border-top:1px dashed var(--border);">
+          <div id="w-later-fields" class="toggle-body">
             <div class="input-header"><label for="w-next">Precio en tu próxima carga (USD/USG)</label><span class="hint num" id="w-next-disp"></span></div>
             <input type="text" inputmode="decimal" id="w-next" class="small-in" placeholder="0.00" />
             <div class="field-help">Si acá está igual o más barato que en tu próxima carga, siempre conviene llegar al mínimo. Chequeá que el extra entre en los tanques y en los pesos.</div>
@@ -252,7 +418,7 @@
       </section>
 
       <section class="card">
-        <div class="section-title" style="text-align:center; color:#b45309;">2. Punto de equilibrio</div>
+        <div class="section-title center"><span class="n">02</span> Punto de equilibrio</div>
         <div class="hero-value"><span id="be-val">—</span> <span class="hero-unit">USG</span></div>
         <div class="hero-sub" id="be-sub">Completá los datos del FBO</div>
         <div class="scale-box">
@@ -267,15 +433,15 @@
             <span id="tick-min" style="left:66.6%">—</span>
           </div>
           <div class="zones">
-            <div class="zone yellow" id="zone-yellow">🟡 CARGA LO JUSTO<div class="range">Hasta <span id="z-be">—</span> USG</div></div>
-            <div class="zone red" id="zone-red">🔴 NO CARGUES<div class="range"><span id="z-mid1">—</span> a <span id="z-mid2">—</span> USG</div></div>
-            <div class="zone green" id="zone-green">🟢 CARGA TRANQUILO<div class="range">Desde <span id="z-min">—</span> USG</div></div>
+            <div class="zone yellow" id="zone-yellow"><span class="dot"></span>Carga lo justo<div class="range">Hasta <span id="z-be">—</span> USG</div></div>
+            <div class="zone red" id="zone-red"><span class="dot"></span>No cargues<div class="range"><span id="z-mid1">—</span> a <span id="z-mid2">—</span> USG</div></div>
+            <div class="zone green" id="zone-green"><span class="dot"></span>Carga tranquilo<div class="range">Desde <span id="z-min">—</span> USG</div></div>
           </div>
         </div>
       </section>
 
       <section class="card">
-        <div class="section-title">3. ¿Cuánto necesitás cargar?</div>
+        <div class="section-title"><span class="n">03</span> ¿Cuánto necesitás cargar?</div>
         <div class="input-item">
           <div class="input-header"><label for="w-need">Combustible que necesitás</label><span class="hint num" id="w-need-disp"></span></div>
           <div class="input-row">
@@ -292,15 +458,15 @@
       <section class="card">
         <div class="section-title">Reglas de decisión</div>
         <div class="rule-card rule-yellow">
-          <div class="rule-title">🟡 Menos de <span class="r-be">—</span> USG — CARGA LO JUSTO</div>
+          <div class="rule-title"><span class="dot"></span>Menos de <span class="r-be">—</span> USG · Carga lo justo</div>
           <div><strong>Pagá el handling fee y cargá lo justo.</strong> Llegar al mínimo te sale más caro que el fee<span class="r-later-note"></span>.</div>
         </div>
         <div class="rule-card rule-red">
-          <div class="rule-title">🔴 Entre <span class="r-be">—</span> y <span class="r-min">—</span> USG — NO CARGUES JUSTO</div>
-          <div><strong>¡No pagues el fee en este rango!</strong> Estirate y cargá los <span class="r-min">—</span> USG del mínimo: te sale más barato que el fee + tu combustible. ¡Te llevás combustible gratis!</div>
+          <div class="rule-title"><span class="dot"></span>Entre <span class="r-be">—</span> y <span class="r-min">—</span> USG · No cargues justo</div>
+          <div><strong>No pagues el fee en este rango.</strong> Estirate y cargá los <span class="r-min">—</span> USG del mínimo: te sale más barato que el fee más tu combustible. Te llevás combustible gratis.</div>
         </div>
         <div class="rule-card rule-green">
-          <div class="rule-title">🟢 <span class="r-min">—</span> USG o más — CARGA TRANQUILO</div>
+          <div class="rule-title"><span class="dot"></span><span class="r-min">—</span> USG o más · Carga tranquilo</div>
           <div><strong>Cargá de una.</strong> Alcanzás el mínimo y el handling fee queda 100% bonificado.</div>
         </div>
       </section>
@@ -309,12 +475,12 @@
     <!-- ============ TANKERING ============ -->
     <div id="view-tankering" class="view">
       <div class="nav-bar">
-        <button class="back-btn" data-go="menu">← Volver al Menú</button>
-        <span class="nav-title">Ahorro Tankereando</span>
+        <button class="back-btn" data-go="menu">← Menú</button>
+        <span class="nav-title">Ahorro <span class="serif">tankereando</span></span>
       </div>
 
       <div class="print-only card">
-        <strong>Flyzar — Análisis de tankering</strong><br />
+        <div class="eyebrow">Flyzar · Análisis de tankering</div>
         <span class="small muted" id="print-date"></span>
       </div>
 
@@ -323,91 +489,94 @@
 
       <div class="toggle-card">
         <label class="row" for="t-carry-check">
-          <div style="display:flex; align-items:center; gap:8px;">
-            <span style="font-size:1.1rem;" aria-hidden="true">⚖️</span>
-            <div>
-              <div style="font-size:0.8rem; font-weight:800;">Descontar costo de acarreo de peso</div>
-              <div style="font-size:0.7rem; color:#64748b;">Parte del combustible extra se quema por llevar más peso</div>
-            </div>
+          <div>
+            <div class="toggle-title">Descontar costo de acarreo de peso</div>
+            <div class="toggle-desc">Parte del combustible extra se quema por llevar más peso</div>
           </div>
-          <input type="checkbox" id="t-carry-check" />
+          <input type="checkbox" class="switch" id="t-carry-check" />
         </label>
-        <div id="t-carry-fields" style="display:none; margin-top:10px; padding-top:10px; border-top:1px dashed var(--border);">
+        <div id="t-carry-fields" class="toggle-body">
           <label class="lbl" for="t-carry-rate">Tasa de quemado del extra (% por hora de vuelo)</label>
           <input type="text" inputmode="decimal" id="t-carry-rate" class="small-in" placeholder="3.0" />
-          <div class="field-help">Las horas de vuelo se cargan en cada tramo. Regla típica: 3–4 %/hr para jets.</div>
+          <div class="field-help">Las horas de vuelo se cargan en cada tramo. Regla típica: 3–4 %/h para jets.</div>
         </div>
       </div>
 
       <div id="t-alerts" style="display:flex; flex-direction:column; gap:10px;" aria-live="polite"></div>
 
       <section class="card">
-        <div class="section-title" style="text-align:center; color:var(--emerald);">Ahorro estimado tankereando</div>
+        <div class="section-title center">Ahorro estimado</div>
         <div class="hero-value" id="t-sav-val">USD 0</div>
         <div class="hero-sub" id="t-sav-sub">Completá los tramos arriba para ver el ahorro</div>
         <div id="t-steps"></div>
 
-        <div class="note">⚠️ <strong>Ojo con los pesos:</strong> chequeá no pasarte de MTOW al despegar ni de MLW al tocar.</div>
+        <div class="note"><strong>Ojo con los pesos:</strong> chequeá no pasarte de MTOW al despegar ni de MLW al tocar.</div>
 
-        <div class="btn-row" style="margin-top:10px;">
-          <button class="btn green" type="button" id="btn-print">📄 Imprimir / PDF</button>
-          <button class="btn blue" type="button" id="btn-open-save">💾 Guardar vuelo</button>
+        <div class="btn-row" style="margin-top:12px;">
+          <button class="btn ghost" type="button" id="btn-print">Imprimir / PDF</button>
+          <button class="btn primary" type="button" id="btn-open-save">Guardar vuelo</button>
         </div>
 
         <form id="save-form" class="save-form" autocomplete="off">
           <div class="grid2">
             <div>
               <label for="s-reg">Matrícula</label>
-              <input type="text" id="s-reg" class="small-in" list="reg-list" placeholder="LV-KLH" style="text-transform:uppercase;" required />
+              <input type="text" id="s-reg" class="small-in upper" list="reg-list" placeholder="LV-KLH" required />
               <datalist id="reg-list"></datalist>
             </div>
             <div>
               <label for="s-flt">N° de vuelo (opcional)</label>
-              <input type="text" id="s-flt" class="small-in" placeholder="—" style="text-transform:uppercase;" />
+              <input type="text" id="s-flt" class="small-in upper" placeholder="—" />
             </div>
           </div>
-          <div style="margin-top:8px;">
+          <div style="margin-top:10px;">
             <label class="lbl" for="s-date">Fecha</label>
-            <input type="date" id="s-date" class="small-in" style="width:100%; height:38px; border-radius:12px; border:1px solid var(--border-strong); background:var(--bg); text-align:center; font-weight:700;" />
+            <input type="date" id="s-date" />
           </div>
-          <div class="btn-row" style="margin-top:10px;">
+          <div class="btn-row" style="margin-top:12px;">
             <button type="button" class="btn ghost" id="btn-cancel-save">Cancelar</button>
-            <button type="submit" class="btn blue">Guardar en bitácora</button>
+            <button type="submit" class="btn primary">Guardar en bitácora</button>
           </div>
         </form>
       </section>
 
-      <button type="button" class="dashed-btn no-print" id="btn-reset-tank" style="color:var(--text-muted);">↺ Limpiar todo</button>
+      <button type="button" class="dashed-btn quiet no-print" id="btn-reset-tank">↺ Limpiar todo</button>
     </div>
 
     <!-- ============ BITÁCORA ============ -->
     <div id="view-bitacora" class="view">
       <div class="nav-bar">
-        <button class="back-btn" data-go="menu">← Volver al Menú</button>
-        <span class="nav-title">Registro de ahorro</span>
+        <button class="back-btn" data-go="menu">← Menú</button>
+        <span class="nav-title">Registro de <span class="serif">ahorro</span></span>
       </div>
 
-      <section class="card kpis">
-        <div><div class="kpi-l">Ahorro total</div><div id="b-kpi-sav" class="kpi-v mono" style="color:var(--emerald-dark);">USD 0</div></div>
-        <div><div class="kpi-l">Tankereado</div><div id="b-kpi-usg" class="kpi-v mono" style="color:#1d4ed8;">0 USG</div></div>
-        <div><div class="kpi-l">Vuelos</div><div id="b-kpi-cnt" class="kpi-v mono">0</div></div>
+      <section class="kpi-hero">
+        <div class="eyebrow">Ahorro total</div>
+        <div id="b-kpi-sav" class="kpi-big">USD 0</div>
+        <div class="kpi-row">
+          <div><div class="kpi-l">Tankereado</div><div id="b-kpi-usg" class="kpi-v">0 USG</div></div>
+          <div><div class="kpi-l">Vuelos</div><div id="b-kpi-cnt" class="kpi-v">0</div></div>
+        </div>
       </section>
 
       <div class="grid2">
         <div>
           <label for="b-filter-reg">Matrícula</label>
-          <select id="b-filter-reg" style="width:100%; height:40px;"><option value="">Todas</option></select>
+          <select id="b-filter-reg" class="full"><option value="">Todas</option></select>
         </div>
         <div>
           <label for="b-filter-month">Mes</label>
-          <select id="b-filter-month" style="width:100%; height:40px;"><option value="">Todos</option></select>
+          <select id="b-filter-month" class="full"><option value="">Todos</option></select>
         </div>
       </div>
 
-      <button type="button" class="btn soft-blue" id="btn-export" style="flex:none;">📊 Exportar a Excel (CSV)</button>
+      <div id="b-list" class="log-list"></div>
+      <div id="b-empty"></div>
 
-      <div id="b-list" style="display:flex; flex-direction:column; gap:10px;"></div>
+      <button type="button" class="btn ghost" id="btn-export" style="flex:none;">Exportar a Excel (CSV)</button>
     </div>
+
+    <footer>Where flying is <span class="serif">natural.</span></footer>
   </div>
 
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
@@ -674,14 +843,14 @@
         : '<tr class="' + (r.action === 'load-min' ? 'best' : '') + '"><td>Cargar el mínimo (' + fmt(min) + ' USG), sin fee</td><td>' + usd(r.costMin, 2) + '</td></tr>';
       let title, body, table = '';
       if (r.zone === 'green') {
-        title = '🟢 CARGA TRANQUILO';
+        title = '<span class="dot"></span>Carga tranquilo';
         body = 'Con ' + fmt(need) + ' USG ya pasás el mínimo: el fee de ' + usd(fee, 2) + ' queda bonificado. Total: <strong>' + usd(r.costMin, 2) + '</strong>.';
       } else if (r.zone === 'yellow') {
-        title = '🟡 CARGA LO JUSTO Y PAGÁ EL FEE';
+        title = '<span class="dot"></span>Cargá lo justo y pagá el fee';
         body = 'Te faltan ' + fmt(r.extraGal) + ' USG para el mínimo y ' + (r.useLater ? 'aun aprovechándolos después, ' : '') + 'comprarlos sale más que el fee. Ahorrás <strong>' + usd(r.saving, 2) + '</strong> vs. estirarte al mínimo.';
         table = '<table class="cmp">' + rowJusto + rowMin + '</table>';
       } else {
-        title = '🔴 NO PAGUES EL FEE: CARGÁ ' + fmt(min) + ' USG';
+        title = '<span class="dot"></span>No pagues el fee: cargá ' + fmt(min) + ' USG';
         body = 'Cargando ' + fmt(r.extraGal) + ' USG más llegás al mínimo y te ahorrás <strong>' + usd(r.saving, 2) + '</strong>. ' + (r.useLater ? 'Ya está descontado lo que no comprás en tu próxima carga.' : 'Ese combustible extra te lo llevás en los tanques.');
         table = '<table class="cmp">' + rowJusto + rowMin + '</table>';
       }
@@ -701,8 +870,8 @@
       $('legs').innerHTML = state.legs.map((l, i) => {
         const k = i + 1;
         const isLast = i === n - 1;
-        return '<section class="card" style="margin-bottom:14px;">' +
-          '<div class="leg-head"><span class="section-title">Tramo ' + k + (isLast && n > 1 ? ' <span style="text-transform:none; font-weight:600;">(destino)</span>' : '') + '</span>' +
+        return '<section class="card leg">' +
+          '<div class="leg-head"><span class="section-title"><span class="n">' + String(k).padStart(2, '0') + '</span> Tramo' + (isLast && n > 1 ? ' <span class="tag">destino</span>' : '') + '</span>' +
           '<div class="right"><input type="text" class="icao" id="l' + i + '-icao" maxlength="4" placeholder="OACI" aria-label="OACI tramo ' + k + '" value="' + esc(l.icao) + '" />' +
           (n > 2 ? '<button type="button" class="icon-btn" data-remove="' + i + '" aria-label="Quitar tramo ' + k + '">✕</button>' : '') +
           '</div></div>' +
@@ -760,9 +929,9 @@
       const r = calcTankering({ legs, carry, ratePct });
 
       // Advertencias por tramo
-      r.steps.forEach((s, i) => { $('l' + i + '-warn').textContent = s.short ? '⚠️ Cargaste menos de lo necesario para el tramo.' : ''; });
-      $('l' + (legs.length - 1) + '-warn').textContent = r.lastShort ? '⚠️ Cargaste menos de lo necesario para el tramo.'
-        : (r.lastExtra > 0 ? 'ℹ️ El extra del último tramo no se cuenta: agregá el tramo siguiente con su precio para calcularlo.' : '');
+      r.steps.forEach((s, i) => { $('l' + i + '-warn').textContent = s.short ? 'Cargaste menos de lo necesario para el tramo.' : ''; });
+      $('l' + (legs.length - 1) + '-warn').textContent = r.lastShort ? 'Cargaste menos de lo necesario para el tramo.'
+        : (r.lastExtra > 0 ? 'El extra del último tramo no se cuenta: agregá el tramo siguiente con su precio para calcularlo.' : '');
 
       // Alertas globales
       const alerts = [];
@@ -771,8 +940,8 @@
           const why = s.diff <= 0
             ? 'En ' + esc(s.to) + ' (' + usd(s.pTo, 2) + ') el combustible está igual o más barato que en ' + esc(s.from) + ' (' + usd(s.pFrom, 2) + ').'
             : 'La diferencia de precio no alcanza a cubrir lo que se quema por acarreo.';
-          alerts.push('<div class="alert loss"><strong class="t">⚠️ ' + esc(s.from) + ' → ' + esc(s.to) + ': TANKEREAR ACÁ TE HACE PERDER</strong>' +
-            why + ' Perdés <strong>' + usd(Math.abs(s.saving), 0) + '</strong>. Cargá solo lo justo en ' + esc(s.from) + '.</div>');
+          alerts.push('<div class="alert loss"><strong class="t">' + esc(s.from) + ' → ' + esc(s.to) + ' · Tankerear acá te hace perder</strong><span>' +
+            why + ' Perdés <strong>' + usd(Math.abs(s.saving), 0) + '</strong>. Cargá solo lo justo en ' + esc(s.from) + '.</span></div>');
         }
       });
       $('t-alerts').innerHTML = alerts.join('');
@@ -780,7 +949,7 @@
       // Resultado
       const tv = $('t-sav-val');
       tv.textContent = usd(Math.round(r.total));
-      tv.style.color = r.total > 0.5 ? 'var(--emerald)' : r.total < -0.5 ? 'var(--rose)' : 'var(--text)';
+      tv.className = 'hero-value' + (r.total > 0.5 ? ' is-pos' : r.total < -0.5 ? ' is-neg' : '');
       $('t-sav-sub').textContent = r.ready
         ? (carry ? 'Ahorro neto (descontado acarreo ' + usd(r.carryTotal, 0) + '): ' : 'Ahorro exacto: ') + usd(r.total, 2)
         : 'Completá los tramos arriba para ver el ahorro';
@@ -788,7 +957,7 @@
       $('t-steps').innerHTML = r.steps.map((s, i) => {
         if (!(s.extra > 0)) return '';
         const cls = !s.priced ? '' : s.saving >= 0 ? 'pos' : 'neg';
-        let h = '<div class="step-box ' + cls + '"><div class="step-title">✈️ ' + (i + 1) + '. ' + esc(s.from) + ' → ' + esc(s.to) + '</div>';
+        let h = '<div class="step-box ' + cls + '"><div class="step-title"><span class="step-n">' + String(i + 1).padStart(2, '0') + '</span>' + esc(s.from) + ' → ' + esc(s.to) + '</div>';
         h += '<div class="kv"><span>Extra que subiste en ' + esc(s.from) + ':</span><strong>+' + fmt(s.extra) + ' USG (' + fmt(s.extra * d) + ' lb)</strong></div>';
         if (s.priced) {
           h += '<div class="kv"><span>Precio ' + esc(s.from) + ' → ' + esc(s.to) + ':</span><span>' + usd(s.pFrom, 2) + ' → ' + usd(s.pTo, 2) + ' (' + (s.diff >= 0 ? '+' : '−') + fmt(Math.abs(s.diff), 2) + '/USG)</span></div>';
@@ -798,7 +967,7 @@
           h += '<div class="kv"><span>Precio máx. en ' + esc(s.from) + ' para que convenga:</span><strong>' + usd(s.beOriginPrice, 2) + '</strong></div>';
           h += '<div class="kv total"><span>Ahorro del tramo:</span><span class="mono">' + usd(s.saving, 2) + '</span></div>';
         } else {
-          h += '<div class="kv" style="color:var(--text-muted);"><span>Cargá los precios de ' + esc(s.from) + ' y ' + esc(s.to) + ' para calcular.</span></div>';
+          h += '<div class="kv"><span>Cargá los precios de ' + esc(s.from) + ' y ' + esc(s.to) + ' para calcular.</span></div>';
         }
         return h + '</div>';
       }).join('');
@@ -854,7 +1023,7 @@
       state.lastReg = reg; persist();
       $('save-form').classList.remove('open');
       $('s-flt').value = '';
-      toast('✅ Vuelo guardado en la bitácora');
+      toast('Vuelo guardado en la bitácora');
       location.hash = 'bitacora';
     }
 
@@ -894,26 +1063,25 @@
       const totalSav = items.reduce((a, b) => a + (Number(b.totalSavingsUSD) || 0), 0);
       const totalUSG = items.reduce((a, b) => a + (Number(b.extraUSG) || 0), 0);
       $('b-kpi-sav').textContent = usd(Math.round(totalSav));
-      $('b-kpi-sav').style.color = totalSav < 0 ? 'var(--rose)' : 'var(--emerald-dark)';
+      $('b-kpi-sav').classList.toggle('is-neg', totalSav < 0);
       $('b-kpi-usg').textContent = fmt(totalUSG) + ' USG';
       $('b-kpi-cnt').textContent = items.length;
 
-      if (!items.length) {
-        $('b-list').innerHTML = '<div class="empty">' + (all.length ? 'No hay vuelos con ese filtro.' : 'No hay vuelos guardados todavía.<br><span style="font-size:0.7rem; font-weight:400; color:#64748b;">Calculá un tankering y tocá "Guardar vuelo".</span>') + '</div>';
-        return;
-      }
+      $('b-empty').innerHTML = items.length ? '' : '<div class="empty">' + (all.length
+        ? '<span class="serif">Sin resultados.</span>No hay vuelos con ese filtro.'
+        : '<span class="serif">Todavía no hay vuelos.</span>Calculá un tankering y tocá "Guardar vuelo".') + '</div>';
       $('b-list').innerHTML = items.map(it => {
         const sav = Number(it.totalSavingsUSD) || 0;
         return '<div class="log-item">' +
-          '<div class="log-top"><div style="display:flex; align-items:center; gap:6px;"><span class="reg mono">' + esc(it.registration) + '</span>' +
-          (it.flightNumber ? '<span style="font-size:0.72rem; font-weight:700; color:#64748b;">' + esc(it.flightNumber) + '</span>' : '') + '</div>' +
-          '<div style="display:flex; align-items:center; gap:4px;"><span style="font-size:0.7rem; color:var(--text-faint);">📅 ' + esc(showDate(it._iso) || it.dateStr) + '</span>' +
+          '<div class="log-top"><div class="log-id"><span class="reg">' + esc(it.registration) + '</span>' +
+          (it.flightNumber ? '<span class="flt">' + esc(it.flightNumber) + '</span>' : '') + '</div>' +
+          '<div class="log-id"><span class="log-date">' + esc(showDate(it._iso) || it.dateStr) + '</span>' +
           '<button type="button" class="del-btn" data-del="' + esc(it.id) + '" aria-label="Eliminar vuelo">✕</button></div></div>' +
-          '<div style="display:flex; justify-content:space-between; align-items:center; gap:8px;">' +
-          '<div><div style="font-weight:800;">' + esc(it.route) + '</div>' +
-          '<div class="mono" style="color:#64748b; font-size:0.7rem;">+' + fmt(it.extraUSG) + ' USG (≈ ' + fmt(it.extraLbs) + ' lb)</div></div>' +
-          '<div style="text-align:right;"><div class="mono" style="font-weight:900; font-size:0.92rem; color:' + (sav < 0 ? 'var(--rose)' : 'var(--emerald-dark)') + ';">' + (sav >= 0 ? '+' : '') + usd(Math.round(sav)) + '</div>' +
-          '<div style="font-size:0.65rem; color:var(--text-faint);">' + (it.useCarryCost ? 'Neto c/acarreo' : 'Ahorro directo') + '</div></div>' +
+          '<div class="log-body">' +
+          '<div><div class="log-route">' + esc(it.route) + '</div>' +
+          '<div class="log-sub">+' + fmt(it.extraUSG) + ' USG · ≈ ' + fmt(it.extraLbs) + ' lb</div></div>' +
+          '<div><div class="log-sav' + (sav < 0 ? ' is-neg' : '') + '">' + (sav >= 0 ? '+' : '') + usd(Math.round(sav)) + '</div>' +
+          '<div class="log-kind">' + (it.useCarryCost ? 'Neto c/acarreo' : 'Ahorro directo') + '</div></div>' +
           '</div></div>';
       }).join('');
     }
@@ -940,8 +1108,26 @@
       setTimeout(() => URL.revokeObjectURL(url), 1000);
     }
 
+    /* ======================= TEMA (auto / claro / oscuro) ======================= */
+    const THEMES = [['', 'automático', '◐'], ['light', 'claro', '☀'], ['dark', 'oscuro', '☾']];
+    function applyTheme(t) {
+      const i = Math.max(0, THEMES.findIndex(x => x[0] === t));
+      const [val, name, icon] = THEMES[i];
+      if (val) document.documentElement.setAttribute('data-theme', val); else document.documentElement.removeAttribute('data-theme');
+      $('btn-theme').textContent = icon;
+      $('btn-theme').title = 'Tema: ' + name;
+      $('btn-theme').setAttribute('aria-label', 'Tema: ' + name + '. Tocá para cambiar');
+      try { if (val) localStorage.setItem('flyzar_theme', val); else localStorage.removeItem('flyzar_theme'); } catch (e) {}
+    }
+
     /* ======================= INIT ======================= */
     function init() {
+      let theme = ''; try { theme = localStorage.getItem('flyzar_theme') || ''; } catch (e) {}
+      applyTheme(theme);
+      $('btn-theme').addEventListener('click', () => {
+        const cur = document.documentElement.getAttribute('data-theme') || '';
+        applyTheme(THEMES[(THEMES.findIndex(x => x[0] === cur) + 1) % THEMES.length][0]);
+      });
       $('density').value = state.density ?? '';
       $('fee').value = state.fee ?? ''; $('waiver').value = state.waiver ?? ''; $('price').value = state.price ?? '';
       $('w-need').value = state.wNeed ?? ''; $('w-need-u').value = state.wNeedU || 'USG';

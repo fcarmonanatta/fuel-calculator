@@ -8,6 +8,15 @@ Herramienta web (un solo archivo, `index.html`) para decidir cargas de combustib
 
 No necesita servidor ni build: abrir `index.html` en el navegador o publicarlo tal cual (AI Studio, GitHub Pages, etc.).
 
+## Identidad visual
+
+Basada en el Brandbook de Flyzar:
+
+- **Paleta**: Dress Blue `#2a3440` (primario) y `#d4d6d4`; secundarios `#1f2426`, `#b0b3b5`, `#e9e9e8`, `#443a37`, `#988d85`, `#d4d2d0`. Los colores de decisión (verde/rojo/ámbar) se usan en tonos apagados para convivir con la paleta.
+- **Tipografías**: Proxima Nova (texto) y Tribun italic (acentos). Son de licencia Adobe Fonts; si el dispositivo no las tiene, la app usa Figtree y Newsreader italic de Google Fonts, sus equivalentes libres más cercanos.
+- **Logo**: isotipo y logotipo extraídos como vectores del Brandbook, en `brand/` (`flyzar-logo.svg`, `flyzar-lion.svg`, `flyzar-wordmark.svg`, `flyzar-app-icon.png`). En la app van embebidos, sin archivos externos.
+- **Modo oscuro** automático según el dispositivo, con botón para forzar claro u oscuro.
+
 ## Fórmulas
 
 **Waiver**: el fee equivale a `fee / precio` galones. Punto de equilibrio = `mínimo − fee / precio`.
